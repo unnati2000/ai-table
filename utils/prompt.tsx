@@ -47,14 +47,16 @@ export const prompt = ({ data, query, visibleColumns }: PromptProps<T>) => {
   6. For operations like sorting or filtering, apply the changes to the data array.
   7. If a query involves calculations (e.g., averages), perform them accurately.
   8. Add a rule saying do not hallucinate and add new columns unless the user explicitly asks to
+  9. If user asks to select certain rows, then return all the data that needs to get selected and return them in an array object.
   
   
   Response Guidelines:
   - Always respond in JSON format.
   - Do not add extra properties to columns. Stick to the in
-  - Include 'success' (boolean), 'columns' (modified column state), 'data' (modified data array), and 'message' (explanation of changes) fields.
+  - Include 'success' (boolean), 'columns' (modified column state), 'data' (modified data array), 'message' (explanation of changes) fields and 'selectedData' (data that needs to get selected) if user asks to select certain rows.
   - If the query is unclear or cannot be executed, set 'success' to false and explain why in the 'message'.
   - Do not include any text outside the JSON structure.
+  
   
   Example Queries and Expected Behavior:
   1. "Hide the 'age' column": Remove 'age' from visible columns.
@@ -62,6 +64,7 @@ export const prompt = ({ data, query, visibleColumns }: PromptProps<T>) => {
   3. "Sort by 'name' in ascending order": Modify the data array to reflect sorting.
   4. "Add a row with total marks": Calculate totals and add a new row to the data array.
   5. "Show only 'name' and 'total' columns": Adjust visible columns accordingly.
+  6. "Select the rows with 'John'": Return the data that needs to get selected
 
   Explain each step that you perform and give the reasoning behind it
   
@@ -72,6 +75,7 @@ export const prompt = ({ data, query, visibleColumns }: PromptProps<T>) => {
     "success": true / false,
     "columns": the modified state,
     "reasoning": the reasoning behind each change you made
+    "selectedData": the data that needs to get selected
   }
   
   Respond only with the JSON structure containing your changes and explanations.`;

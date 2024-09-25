@@ -101,6 +101,11 @@ interface TableProps<T> {
   setIsLoading: (isLoading: boolean) => void;
 }
 
+interface Sort {
+  key: string;
+  order: "asc" | "desc" | "";
+}
+
 const Table = <
   T extends {
     id: string;
@@ -139,6 +144,11 @@ const Table = <
 }: TableProps<T>) => {
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
   const [query, setQuery] = useState<string>("");
+  const [tableData, setTableData] = useState<T[]>(data);
+  const [sort, setSort] = useState<Sort>({
+    key: "",
+    order: "",
+  });
 
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
@@ -218,6 +228,20 @@ const Table = <
         return newColumns;
       });
     }
+  };
+
+  const handleRowDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over) return;
+
+    setTableData((items) => {
+      const oldIndex = items.findIndex((item) => item.id === active.id);
+      const newIndex = items.findIndex((item) => item.id === over.id);
+      const newRows = arrayMove(items, oldIndex, newIndex);
+
+      return newRows;
+    });
   };
 
   const handleHide = (columnKey: Key) => {
@@ -300,34 +324,61 @@ const Table = <
 
       const responseData = await response.json();
 
-      // console.log("Received columns:", responseData.result.columns);
-
       const deserializedColumns = deserializeColumns<T>(
         JSON.stringify(responseData.result.columns)
       );
 
       setVisibleColumns(deserializedColumns);
+      setSelectedData(responseData.result.selectedData);
+
+      setQuery("");
     } catch (error) {
-      // console.error("Error generating response:", error);
-      // Handle error, e.g., show an error message to the user
     } finally {
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (sort.key && sort.order) {
+      const sortedData = [...data].sort((a, b) => {
+        const aValue = a[sort.key as keyof T];
+        const bValue = b[sort.key as keyof T];
+
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          return sort.order === "asc"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        }
+
+        if (typeof aValue === "number" && typeof bValue === "number") {
+          return sort.order === "asc" ? aValue - bValue : bValue - aValue;
+        }
+
+        // For other types, you might want to add more specific sorting logic
+        return 0;
+      });
+
+      setTableData(sortedData);
+    } else {
+      // If no sort is applied, reset to original data order
+      setTableData(data);
+    }
+  }, [sort, data]);
 
   return (
     <div className={"relative h-full"}>
       <div className={cn("relative rounded-xl")}>
         {hasTableHeader ? (
           <div
-            className="flex items-center justify-between p-4"
+            className="flex items-center gap-2 justify-between p-4"
             ref={headerRef}
           >
             <Input
               placeholder="Enter your query (e.g., 'Show me videos uploaded in August')"
               value={query}
               classNames={{
-                input: "p-2 min-w-96 rounded-md outline-none",
+                input: "p-2 w-80 rounded-md outline-none",
+                base: "w-80",
               }}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
@@ -336,7 +387,7 @@ const Table = <
                   generateResponse();
                 }
               }}
-              className="flex-grow"
+              // className="flex-grow"
             />
             {headerContent}
             <div className="flex w-fit items-center gap-2">
@@ -458,7 +509,7 @@ const Table = <
                 <DndContext
                   collisionDetection={closestCenter}
                   modifiers={[restrictToVerticalAxis]}
-                  onDragEnd={() => {}}
+                  onDragEnd={handleRowDragEnd}
                   sensors={sensors}
                 >
                   <SortableContext
@@ -474,8 +525,8 @@ const Table = <
                               </td>
                             </tr>
                           ))
-                        : data.length > 0
-                        ? data.map((item, index) => (
+                        : tableData.length > 0
+                        ? tableData.map((item, index) => (
                             <TableRow
                               key={item.id}
                               hasRightClickMenu={hasRightClickMenu}

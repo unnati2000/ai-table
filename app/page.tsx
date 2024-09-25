@@ -5,7 +5,7 @@ import { Column } from "@/types/table";
 
 import { useMemo, useState } from "react";
 
-import { User } from "@nextui-org/react";
+import { Button, User } from "@nextui-org/react";
 
 import { data } from "@/lib/data";
 
@@ -20,11 +20,6 @@ interface User {
   mathsMarks: number;
   scienceMarks: number;
   englishMarks: number;
-}
-
-interface Sort {
-  key: string;
-  order: "asc" | "desc" | "";
 }
 
 export default function Home() {
@@ -100,11 +95,6 @@ export default function Home() {
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [sort, setSort] = useState<Sort>({
-    key: "",
-    order: "",
-  });
-
   return (
     <div className="h-screen p-10">
       <Table
@@ -142,14 +132,30 @@ export default function Home() {
         setIsLoading={setIsLoading}
         searchQuery=""
         setSearchQuery={() => {}}
+        tableHeaderActions={[
+          {
+            label: "Download CSV",
+            component: (
+              <Button
+                disabled={selectedUsers.length === 0}
+                variant="bordered"
+                color="primary"
+                size="md"
+              >
+                Download CSV
+              </Button>
+            ),
+            onAction: () => {},
+          },
+        ]}
         selectedData={selectedUsers}
         // @ts-expect-error: generics error
         setSelectedData={setSelectedUsers}
         isAllRowsSelected={false}
         isLastRow={false}
         index={0}
-        setSortColumn={setSort}
-        sortColumn={sort}
+        // setSortColumn={setSort}
+        // sortColumn={sort}
         isRowSelectionEnabled
         focusIndex={0}
         isSelectionEnabled={true}
