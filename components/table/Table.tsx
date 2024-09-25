@@ -48,6 +48,7 @@ import {
 import { Switch } from "@nextui-org/react";
 import TableColumn from "./TableColumn";
 import TableRow from "./TableRow";
+import { ViewModal } from "../ViewModal";
 
 interface TableHeaderAction {
   label: string;
@@ -119,8 +120,8 @@ const Table = <
   sortColumn,
   setSortColumn,
   hasTableHeader = false,
-  tableHeaderActions,
-  headerContent,
+  // tableHeaderActions,
+  // headerContent,
   tableActions,
   isLoading,
   loadingState,
@@ -145,6 +146,7 @@ const Table = <
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
   const [query, setQuery] = useState<string>("");
   const [tableData, setTableData] = useState<T[]>(data);
+  const [viewModalIsOpen, setViewModalIsOpen] = useState(false);
   const [sort, setSort] = useState<Sort>({
     key: "",
     order: "",
@@ -389,9 +391,24 @@ const Table = <
               }}
               // className="flex-grow"
             />
-            {headerContent}
-            <div className="flex w-fit items-center gap-2">
-              {tableHeaderActions?.map((action) => action.component)}
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="solid"
+                color="primary"
+                onPress={() => setViewModalIsOpen(true)}
+              >
+                Save view
+              </Button>
+
+              <Button
+                disabled={selectedData.length === 0}
+                variant="bordered"
+                color="primary"
+                size="md"
+              >
+                Download CSV
+              </Button>
             </div>
           </div>
         ) : null}
@@ -618,6 +635,11 @@ const Table = <
           {tableActions}
         </motion.div>
       ) : null}
+
+      <ViewModal
+        isOpen={viewModalIsOpen}
+        onClose={() => setViewModalIsOpen(false)}
+      />
     </div>
   );
 };
