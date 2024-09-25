@@ -123,7 +123,7 @@ export default function StudentDataTable() {
           </div>
         }
         data={data}
-        scrollHeight={600}
+        scrollHeight={500}
         // tableId="users"
         isColumnDragEnabled
         isRowDragEnabled

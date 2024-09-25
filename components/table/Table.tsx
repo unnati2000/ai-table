@@ -367,7 +367,7 @@ const Table = <
   }, [sort, data]);
 
   return (
-    <div className={"relative border  h-full"}>
+    <div className={"relative  h-full"}>
       <div className={cn("relative rounded-xl")}>
         {hasTableHeader ? (
           <div
