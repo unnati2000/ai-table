@@ -39,13 +39,13 @@ interface TableColumnProps<T> {
 const TableColumn = <T,>({
   column,
   index,
-  hasTableHeader,
+  // hasTableHeader,
   isAllRowsSelected,
   setSelectedData,
   data,
   sortColumn,
   setSortColumn,
-  visibleColumns,
+  // visibleColumns,
   isColumnDragEnabled,
   isSelectionEnabled = true,
   columnWidths,
@@ -88,12 +88,8 @@ const TableColumn = <T,>({
       key={column.key}
       ref={mergedRef}
       className={cn(
-        "group relative text-sm font-medium bg-zinc-900",
-        "overflow-hidden",
-        !hasTableHeader && index === 0 && "rounded-tl-xl",
-        !hasTableHeader &&
-          index === visibleColumns.length - 1 &&
-          "rounded-tr-xl"
+        "group relative text-sm font-medium border-b border-zinc-700",
+        "overflow-hidden"
       )}
     >
       <motion.div

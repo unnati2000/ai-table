@@ -11,6 +11,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { Input } from "@nextui-org/react";
+
 // import { ollama } from "ollama-ai-provider";
 
 // import { enhanceText } from "@/actions/ai";
@@ -30,6 +31,8 @@ import { motion } from "framer-motion";
 import { CiViewColumn } from "react-icons/ci";
 import { IoIosSearch } from "react-icons/io";
 import { IoMdCloseCircle } from "react-icons/io";
+
+// import { functionPrompt } from "@/actions/ai";
 
 // import { CircleXFilled, ColumnWideAdd, MagnifyingGlass } from "@tessact/icons";
 
@@ -95,6 +98,7 @@ interface TableProps<T> {
     key: string;
     onAction: (id: string) => void;
   }[];
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 const Table = <
@@ -131,17 +135,10 @@ const Table = <
   tableId,
   emptyStateBody,
   emptyStateLabel,
+  setIsLoading,
 }: TableProps<T>) => {
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
   const [query, setQuery] = useState<string>("");
-
-  // const handleQuery = async (query: string) => {
-  //   const formData = new FormData();
-  //   formData.set("text", query);
-  //   formData.set("columns", JSON.stringify(visibleColumns));
-  //   formData.set("data", JSON.stringify(data));
-
-  // };
 
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
@@ -258,6 +255,15 @@ const Table = <
     useSensor(KeyboardSensor, {})
   );
 
+  const deserializeColumns = (columns: string) => {
+    const parsedColumns: Column<T>[] = JSON.parse(columns);
+
+    return parsedColumns.map((column) => ({
+      ...column,
+      cell: eval(`(${column.cell.toString()})`),
+    }));
+  };
+
   useEffect(() => {
     const initialWidths = visibleColumns.reduce((acc, column) => {
       acc[column.key] = column.minWidth || 100; // Use 100 as default minWidth if not specified
@@ -272,72 +278,46 @@ const Table = <
     }
   }, [visibleColumns, tableId]);
 
-  const prompt = `You are a React expert. You will be given a React column state for a table component on which you will need to make changes as per the user’s requirement. User will be providing the changes you need to make in natural language which you need to interpret and return a new state with the requirements made. 
-                  
-  The shape of the column state will be in this format:
-
-export interface Column<T> {
-  header: ReactNode;
-  label: string;
-  key: string;
-  minWidth?: number;
-  maxWidth?: number;
-  canHide?: boolean;
-  isSortable?: boolean;
-  isResizable?: boolean;
-  isRowHeader?: boolean;
-  width?: number | null;
-  cell: ({ row }: { row: T }) => ReactNode;
-}
-
-Here is the user’s data:
-
-${JSON.stringify(data)}
-
-And here is the user’s requirement:
-
-${query}
-
-The visible columns are ${JSON.stringify(visibleColumns)}
-
-Always make sure you follow these rules:
-
-1.⁠ ⁠Always respond in JSON in this format: { success: true / false, data: the modified state }
-
-2.⁠ ⁠If you were able to understand the user’s requirements and make the required changes, respond with success as true and the send back the entire modified state in data. Do not send the partial state or only the  modified parts.
-
-3.⁠ ⁠If you were not able to identify user’s requirement, send success as false and send back the same data that user sent you in the data field.
-
-You need to update columns state and return the new state. Don't start with "Here is the new state" or anything like that. Return your response in the form of: 
-{
-  "success": true / false,
-  "data": the modified state,
-  "message": "Message to show to the user"
-}
-`;
-
   async function generateResponse() {
-    const res = await fetch("http://localhost:11434/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt,
-        model: "llama3.1",
-        stream: false,
-      }),
-    });
+    try {
+      setIsLoading(true);
 
-    console.log({ res });
-    const parsedResult = await res.json();
-    console.log({ parsedResult });
-    // return parsedResult;
+      const response = await fetch("/api/ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data,
+          query,
+          visibleColumns,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("AI request failed");
+      }
+
+      const responseData = await response.json();
+
+      // console.log("Received columns:", responseData.result.columns);
+
+      const deserializedColumns = deserializeColumns<T>(
+        JSON.stringify(responseData.result.columns)
+      );
+
+      setVisibleColumns(deserializedColumns);
+    } catch (error) {
+      // console.error("Error generating response:", error);
+      // Handle error, e.g., show an error message to the user
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className={"relative h-full"}>
-      <div className={cn("relative rounded-xl border border-zinc-800")}>
+      <div className={cn("relative rounded-xl")}>
         {hasTableHeader ? (
           <div
             className="flex items-center justify-between p-4"
@@ -347,12 +327,12 @@ You need to update columns state and return the new state. Don't start with "Her
               placeholder="Enter your query (e.g., 'Show me videos uploaded in August')"
               value={query}
               classNames={{
-                input:
-                  "bg-transparent p-2 min-w-96 border border-zinc-700 rounded-md outline-none",
+                input: "p-2 min-w-96 rounded-md outline-none",
               }}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
+                  setIsLoading(true);
                   generateResponse();
                 }
               }}
@@ -368,7 +348,7 @@ You need to update columns state and return the new state. Don't start with "Her
           <DropdownTrigger>
             <Button
               size="lg"
-              className={`absolute right-0 top-0 z-50 h-11 w-11 flex items-center justify-center rounded-none rounded-tr-md bg-zinc-800 ${
+              className={`absolute right-0 top-0 z-50 h-12 w-11 flex items-center justify-center rounded-none ${
                 hasTableHeader
                   ? `top-[${headerRef.current?.clientHeight}px]`
                   : ""
@@ -417,7 +397,9 @@ You need to update columns state and return the new state. Don't start with "Her
           {/* Remove this random value of 200px from scrollbar */}
           <ScrollShadow
             visibility="none"
-            className={cn("w-full overflow-x-auto rounded-xl")}
+            className={cn(
+              "w-full overflow-x-auto border border-zinc-700 rounded-xl"
+            )}
             style={{
               maxHeight: scrollHeight
                 ? `${scrollHeight}px`
@@ -427,12 +409,13 @@ You need to update columns state and return the new state. Don't start with "Her
             <div ref={tableContainerRef} className="relative overflow-x-auto">
               <table
                 className="w-full"
+                suppressHydrationWarning
                 style={{
                   tableLayout: "fixed",
                   marginBottom: tableActionsY ? `${tableActionsY}px` : "0px",
                 }}
               >
-                <thead className="sticky top-0 z-10  bg-default-100">
+                <thead className="sticky top-0 z-10">
                   <SortableContext
                     items={visibleColumns?.map((item) => item.key)}
                     strategy={horizontalListSortingStrategy}
@@ -491,8 +474,7 @@ You need to update columns state and return the new state. Don't start with "Her
                               </td>
                             </tr>
                           ))
-                        : null}
-                      {data.length > 0
+                        : data.length > 0
                         ? data.map((item, index) => (
                             <TableRow
                               key={item.id}

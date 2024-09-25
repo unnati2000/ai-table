@@ -9,6 +9,8 @@ import { User } from "@nextui-org/react";
 
 import { data } from "@/lib/data";
 
+import { Skeleton } from "@nextui-org/react";
+
 interface User {
   id: string;
   name: string;
@@ -33,17 +35,7 @@ export default function Home() {
         key: "name",
         cell: ({ row }) => (
           <div>
-            <User
-              name={row.name}
-              description={row.email}
-              avatarProps={{
-                src: row.profileImage,
-              }}
-              classNames={{
-                base: "flex",
-                name: "flex",
-              }}
-            />
+            <p>{row.name}</p>
           </div>
         ),
         label: "Name",
@@ -106,6 +98,7 @@ export default function Home() {
   }, []);
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [sort, setSort] = useState<Sort>({
     key: "",
@@ -115,17 +108,42 @@ export default function Home() {
   return (
     <div className="h-screen p-10">
       <Table
+        // @ts-expect-error: generics error
         columns={tableColumns}
+        loadingState={
+          <div className="flex justify-between px-3 py-4">
+            <div className="flex w-full items-center gap-1">
+              <Skeleton className="h-10 w-10 rounded-full" />
+              <div className="flex flex-col gap-1">
+                <Skeleton className="h-4 w-44 rounded-md" />
+                <Skeleton className="h-3 w-36 rounded-md" />
+              </div>
+            </div>
+            <div className="flex w-full flex-col gap-1">
+              <Skeleton className="h-4 w-44 rounded-md" />
+              <Skeleton className="h-3 w-36 rounded-md" />
+            </div>
+            <div className="flex w-full items-center gap-2">
+              <Skeleton className="h-4 w-12 rounded-full" />
+            </div>
+
+            <Skeleton className="h-4 w-44  rounded-md" />
+            <Skeleton className="h-4 w-44 rounded-md" />
+            <Skeleton className="h-4 w-44 rounded-md" />
+          </div>
+        }
         data={data}
         // tableId="users"
         isColumnDragEnabled
         isRowDragEnabled
         hasTableHeader={true}
         headerContent={<div></div>}
-        isLoading={false}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
         searchQuery=""
         setSearchQuery={() => {}}
         selectedData={selectedUsers}
+        // @ts-expect-error: generics error
         setSelectedData={setSelectedUsers}
         isAllRowsSelected={false}
         isLastRow={false}
@@ -134,7 +152,7 @@ export default function Home() {
         sortColumn={sort}
         isRowSelectionEnabled
         focusIndex={0}
-        isSelectionEnabled
+        isSelectionEnabled={true}
       />
     </div>
   );

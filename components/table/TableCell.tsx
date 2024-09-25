@@ -2,7 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@nextui-org/react";
 import { motion } from "framer-motion";
-import { PiDotsSixVerticalLight } from "react-icons/pi";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 import { Column } from "@/types/table";
 
@@ -67,13 +67,11 @@ const TableCell = <T extends { id: string }>({
         "px-10": index !== 0,
       })}
     >
-      <div className="flex items-center gap-3 overflow-hidden">
+      <div className="flex text-center h-full items-center  gap-3 overflow-hidden">
         {index == 0 ? (
           <div className="flex flex-shrink-0 items-center gap-2 pl-1">
-            {/* <div className="absolute -left-2 z-100 border border-red-400"> */}
-
             {isRowDragEnabled ? (
-              <PiDotsSixVerticalLight
+              <RxHamburgerMenu
                 size={14}
                 className="cursor-grab"
                 {...attributes}
@@ -83,7 +81,6 @@ const TableCell = <T extends { id: string }>({
               <div className="h-4 w-4" />
             )}
 
-            {/* </div> */}
             {isSelectionEnabled && (
               <Checkbox
                 isSelected={isRowSelected}

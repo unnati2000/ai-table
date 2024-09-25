@@ -6,10 +6,10 @@ export interface Column<T> {
   key: string;
   minWidth?: number;
   maxWidth?: number;
-  canHide?: boolean;
   isSortable?: boolean;
   isResizable?: boolean;
   isRowHeader?: boolean;
   width?: number | null;
   cell: ({ row }: { row: T }) => ReactNode;
 }
+
