@@ -10,6 +10,8 @@ import { MdOutlineWbSunny, MdDarkMode } from "react-icons/md";
 
 import { LuSend } from "react-icons/lu";
 
+import { CiMail } from "react-icons/ci";
+
 import StudentDataTable from "@/components/student-data/StudentDataTable";
 
 const tableData = [
@@ -47,15 +49,42 @@ export default function Home() {
         </Button>
       </nav>
 
-      <div className="mt-28 flex flex-col items-center gap-6">
-        <div className="flex flex-col items-center gap-2">
-          <p className="text-4xl font-medium">AI Tables</p>
-          <p className="text-lg text-ds-text-secondary">
-            AI Tables is a tool that allows you to create tables with AI.
-          </p>
+      <div className="mt-16 flex flex-col items-center gap-6">
+        {/* fancy div */}
+        <div className="absolute -top-10 -left-10 h-[400px] w-[200px] rounded-full -rotate-45 bg-gradient-to-b from-zinc-900 to-zinc-800 blur-3xl" />
+        {/* main section */}
+        <div className="flex flex-col items-center gap-10">
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-4xl font-bold">AI Tables</p>
+            <p className="text-lg text-zinc-600 max-w-xs text-center text-ds-text-secondary">
+              AI Tables is a tool that allows you to perform complex queries on
+              your data.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-lg font-semibold">
+              Want to join our waiting list?
+            </p>
+            <Input
+              placeholder="Add you email to join our waiting list..."
+              size="lg"
+              startContent={
+                <div className="bg-zinc-800 rounded-lg p-2">
+                  <CiMail />
+                </div>
+              }
+              className="shadow-md w-96"
+              classNames={{
+                inputWrapper:
+                  "bg-zinc-950 border border-zinc-700 data-[focus=true]:bg-zinc-900 data-[focus=true]:border-zinc-600 data-[hover=true]:bg-zinc-900",
+                input: "placeholder:text-zinc-700",
+              }}
+            />
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           {tableData.map((table) => (
             <Chip
               key={table.slug}
@@ -66,7 +95,7 @@ export default function Home() {
               <p>{table.title}</p>
             </Chip>
           ))}
-        </div>
+        </div> */}
       </div>
 
       <StudentDataTable />

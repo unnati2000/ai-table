@@ -367,49 +367,13 @@ const Table = <
   }, [sort, data]);
 
   return (
-    <div className={"relative h-full"}>
+    <div className={"relative border  h-full"}>
       <div className={cn("relative rounded-xl")}>
         {hasTableHeader ? (
           <div
             className="flex items-center gap-2 justify-between p-4"
             ref={headerRef}
-          >
-            <Input
-              placeholder="Enter your query (e.g., 'Show me videos uploaded in August')"
-              value={query}
-              classNames={{
-                input: "p-2 w-80 rounded-md outline-none",
-                base: "w-80",
-              }}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  setIsLoading(true);
-                  generateResponse();
-                }
-              }}
-              // className="flex-grow"
-            />
-            {/* 
-            <div className="flex items-center gap-2">
-              <Button
-                variant="solid"
-                color="primary"
-                onPress={() => setViewModalIsOpen(true)}
-              >
-                Save view
-              </Button>
-
-              <Button
-                disabled={selectedData.length === 0}
-                variant="bordered"
-                color="primary"
-                size="md"
-              >
-                Download CSV
-              </Button>
-            </div> */}
-          </div>
+          ></div>
         ) : null}
         <Dropdown closeOnSelect={false}>
           <DropdownTrigger>
