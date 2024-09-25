@@ -4,8 +4,6 @@ import "./globals.css";
 
 import { NextUIProvider } from "@nextui-org/react";
 
-import { Sidebar } from "@/components/Sidebar";
-
 import { ThemeProvider } from "next-themes";
 
 const geistSans = localFont({
@@ -35,14 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider defaultTheme="dark" attribute="class">
-          <NextUIProvider>
-            <div className="flex">
-              <div className="min-w-[200px]">
-                <Sidebar />
-              </div>
-              {children}
-            </div>
-          </NextUIProvider>
+          <NextUIProvider>{children}</NextUIProvider>
         </ThemeProvider>
       </body>
     </html>

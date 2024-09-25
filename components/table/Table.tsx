@@ -48,7 +48,7 @@ import {
 import { Switch } from "@nextui-org/react";
 import TableColumn from "./TableColumn";
 import TableRow from "./TableRow";
-import { ViewModal } from "../ViewModal";
+// import { ViewModal } from "../ViewModal";
 
 interface TableHeaderAction {
   label: string;
@@ -146,7 +146,6 @@ const Table = <
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
   const [query, setQuery] = useState<string>("");
   const [tableData, setTableData] = useState<T[]>(data);
-  const [viewModalIsOpen, setViewModalIsOpen] = useState(false);
   const [sort, setSort] = useState<Sort>({
     key: "",
     order: "",
@@ -391,7 +390,7 @@ const Table = <
               }}
               // className="flex-grow"
             />
-
+            {/* 
             <div className="flex items-center gap-2">
               <Button
                 variant="solid"
@@ -409,7 +408,7 @@ const Table = <
               >
                 Download CSV
               </Button>
-            </div>
+            </div> */}
           </div>
         ) : null}
         <Dropdown closeOnSelect={false}>
@@ -636,10 +635,10 @@ const Table = <
         </motion.div>
       ) : null}
 
-      <ViewModal
+      {/* <ViewModal
         isOpen={viewModalIsOpen}
         onClose={() => setViewModalIsOpen(false)}
-      />
+      /> */}
     </div>
   );
 };
