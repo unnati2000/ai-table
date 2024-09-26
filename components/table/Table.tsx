@@ -1,4 +1,11 @@
-import { Key, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  Key,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import {
   closestCenter,
@@ -57,7 +64,7 @@ interface TableProps<T> {
   tableActions: React.ReactNode;
   setSortColumn?: (data: { key: string; order: "asc" | "desc" | "" }) => void;
   isLoading: boolean;
-  loadingState: React.ReactNode;
+  loadingState: () => JSX.Element;
   isRowDragEnabled: boolean;
   isColumnDragEnabled: boolean;
   hasRowActions?: boolean;
@@ -81,6 +88,7 @@ interface TableProps<T> {
   }[];
   setIsLoading: (isLoading: boolean) => void;
   tableTitle?: string;
+  previousPrompt?: string;
 }
 
 const Table = <
@@ -89,6 +97,7 @@ const Table = <
   }
 >({
   columns,
+  previousPrompt,
   tableData,
   visibleColumns,
   setVisibleColumns,
@@ -223,6 +232,11 @@ const Table = <
         <div className="flex items-center border-b justify-between">
           <div className="px-4">
             <h1>{tableTitle}</h1>
+            {previousPrompt && (
+              <p className="text-sm text-ds-text-secondary">
+                Previous prompt: {previousPrompt}
+              </p>
+            )}
           </div>
           <Dropdown closeOnSelect={false}>
             <DropdownTrigger>

@@ -1,8 +1,8 @@
 export const hrData = [
   {
     id: "1",
-    name: "John Doe",
-    email: "john.doe@example.com",
+    name: "Nitin Ranganath",
+    email: "nitin.ranganath@gmail.com",
     phoneNumber: "555-0101",
     department: "IT",
     position: "Software Engineer",
@@ -11,8 +11,8 @@ export const hrData = [
   },
   {
     id: "2",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
+    name: "Akash Nagraj",
+    email: "akash.nagraj@gmail.com",
     phoneNumber: "555-0102",
     department: "HR",
     position: "HR Manager",
@@ -21,8 +21,8 @@ export const hrData = [
   },
   {
     id: "3",
-    name: "Alice Johnson",
-    email: "alice.j@example.com",
+    name: "Amey Bhavsar",
+    email: "amey.bhavsar@gmail.com",
     phoneNumber: "555-0103",
     department: "Marketing",
     position: "Marketing Specialist",
@@ -31,8 +31,8 @@ export const hrData = [
   },
   {
     id: "4",
-    name: "Bob Brown",
-    email: "bob.brown@example.com",
+    name: "Abhishek Harne",
+    email: "abhishek.harne@gmail.com",
     phoneNumber: "555-0104",
     department: "Finance",
     position: "CFO",
@@ -41,8 +41,8 @@ export const hrData = [
   },
   {
     id: "5",
-    name: "Charlie White",
-    email: "charlie.w@example.com",
+    name: "Davini Bobade",
+    email: "davini.bobade@gmail.com",
     phoneNumber: "555-0105",
     department: "IT",
     position: "System Analyst",

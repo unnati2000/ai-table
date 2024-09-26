@@ -12,6 +12,8 @@ import { BsStars } from "react-icons/bs";
 
 import { LuSend } from "react-icons/lu";
 
+import { cn } from "@/lib/utils";
+
 // import { CiMail } from "react-icons/ci";
 
 import { PiStudentLight } from "react-icons/pi";
@@ -21,6 +23,12 @@ import { IoAnalyticsSharp } from "react-icons/io5";
 import { Column } from "@/types/table";
 
 import {
+  StudentLoadingState,
+  HRLoadingState,
+  WebAnalyticsLoadingState,
+} from "@/components/loading-state/LoadingState";
+
+import {
   userTableColumns,
   hrTableColumns,
   webAnalyticsColumns,
@@ -28,7 +36,7 @@ import {
 
 import { GoPeople } from "react-icons/go";
 
-import { Skeleton } from "@nextui-org/react";
+// import { Skeleton } from "@nextui-org/react";
 // import StudentDataTable from "@/components/student-data/StudentDataTable";
 
 import { users } from "@/lib/users";
@@ -64,6 +72,7 @@ export default function Home<T extends { id: string }>() {
   const { theme } = useTheme();
 
   const [prompt, setPrompt] = useState<string>("");
+  const [previousPrompt, setPreviousPrompt] = useState<string>("");
   const [selectedTable, setSelectedTable] = useState<
     "student-data" | "web-analytics" | "hr-data"
   >("student-data");
@@ -126,6 +135,8 @@ export default function Home<T extends { id: string }>() {
         setSort(responseData.result.sortColumn);
       }
 
+      setPreviousPrompt(prompt);
+
       setPrompt("");
     } catch (error) {
     } finally {
@@ -166,29 +177,15 @@ export default function Home<T extends { id: string }>() {
 
         <div className="mx-20">
           <Table
+            previousPrompt={previousPrompt}
             tableActions={null}
             columns={userTableColumns()}
             loadingState={
-              <div className="flex justify-between px-3 py-4">
-                <div className="flex w-full items-center gap-1">
-                  <Skeleton className="h-10 w-10 rounded-full" />
-                  <div className="flex flex-col gap-1">
-                    <Skeleton className="h-4 w-44 rounded-md" />
-                    <Skeleton className="h-3 w-36 rounded-md" />
-                  </div>
-                </div>
-                <div className="flex w-full flex-col gap-1">
-                  <Skeleton className="h-4 w-44 rounded-md" />
-                  <Skeleton className="h-3 w-36 rounded-md" />
-                </div>
-                <div className="flex w-full items-center gap-2">
-                  <Skeleton className="h-4 w-12 rounded-full" />
-                </div>
-
-                <Skeleton className="h-4 w-44  rounded-md" />
-                <Skeleton className="h-4 w-44 rounded-md" />
-                <Skeleton className="h-4 w-44 rounded-md" />
-              </div>
+              selectedTable === "student-data"
+                ? StudentLoadingState
+                : selectedTable === "web-analytics"
+                ? WebAnalyticsLoadingState
+                : HRLoadingState
             }
             sortColumn={sort}
             setSortColumn={setSort}
@@ -204,12 +201,18 @@ export default function Home<T extends { id: string }>() {
             tableData={tableData}
             setTableData={setTableData}
             isRowSelectionEnabled
-            tableTitle="Student's Info"
+            tableTitle={
+              selectedTable === "student-data"
+                ? "Student Data"
+                : selectedTable === "web-analytics"
+                ? "Web Analytics"
+                : "HR Data"
+            }
           />
         </div>
       </div>
 
-      <div className="fixed flex gap-4  items-center flex-col justify-center bottom-0 text-center h-[calc(100vh-900px)] w-full  backdrop-blur-md">
+      <div className="fixed flex gap-4  items-center flex-col justify-center pb-12 pt-4 bottom-0 text-center w-full  backdrop-blur-md">
         <div className="flex items-center gap-2">
           {tableItems.map((table) => (
             <Chip
@@ -219,9 +222,12 @@ export default function Home<T extends { id: string }>() {
                   table.slug as "student-data" | "web-analytics" | "hr-data"
                 );
               }}
-              className={`${
-                selectedTable === table.slug ? "bg-zinc-800" : "bg-zinc-900"
-              } cursor-pointer`}
+              className={cn(
+                "cursor-pointer p-4 ",
+                selectedTable === table.slug
+                  ? "bg-zinc-300 text-zinc-900"
+                  : "bg-gradient-to-r from-zinc-800 border border-zinc-700 to-zinc-900"
+              )}
             >
               <p>{table.title}</p>
             </Chip>
@@ -240,6 +246,8 @@ export default function Home<T extends { id: string }>() {
                 onPress={() => {
                   generateResponse();
                 }}
+                disabled={isLoading}
+                isLoading={isLoading}
                 size="sm"
                 variant="solid"
                 color="primary"
@@ -285,27 +293,19 @@ const HeroSection = () => {
 
           <div className="flex items-center gap-2">
             <AvatarGroup>
-              <Avatar
-                name="Unnat"
-                src="https://avatars.githubusercontent.com/u/56268833?v=4"
-              />
-              <Avatar
-                name="Unnat"
-                src="https://avatars.githubusercontent.com/u/56268833?v=4"
-              />
-              <Avatar
-                name="Unnat"
-                src="https://avatars.githubusercontent.com/u/56268833?v=4"
-              />
+              <Avatar name="Amey" src="/amey.jpg" />
+              <Avatar name="Akash" src="/ash.jpg" />
+              <Avatar name="Nitin" src="/nitinr.jpg" />
             </AvatarGroup>
             <Input
               placeholder="unnatibamania8@gmail.com"
               size="lg"
               className="shadow-md w-96"
+              type="email"
               classNames={{
                 inputWrapper:
-                  "bg-zinc-900 border rounded-full border-zinc-700 data-[focus=true]:bg-zinc-900 data-[focus=true]:border-zinc-600 data-[hover=true]:bg-zinc-900",
-                input: "placeholder:text-zinc-700",
+                  "bg-zinc-950 border rounded-full border-zinc-700 data-[focus=true]:bg-zinc-900 data-[focus=true]:border-zinc-600 data-[hover=true]:bg-zinc-900",
+                input: "placeholder:text-zinc-500",
               }}
             />
           </div>
