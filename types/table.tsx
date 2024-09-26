@@ -24,3 +24,23 @@ export interface User {
   englishMarks: number;
 }
 
+export interface WebAnalytics {
+  date: string;
+  website: string;
+  visitors: number;
+  pageViews: number;
+  bounceRate: number;
+  averageSessionDuration: number;
+  source: string;
+}
+
+export interface HR {
+  name: string;
+  email: string;
+  phone: string;
+  department: string;
+  position: string;
+  salary: number;
+  hireDate: string;
+}
+

@@ -92,7 +92,7 @@ const TableColumn = <
       key={column.key}
       ref={mergedRef}
       className={cn(
-        "group relative text-sm font-medium border-b border-zinc-700",
+        "group relative text-sm border-r font-medium border-b border-zinc-700",
         "overflow-hidden"
       )}
     >

@@ -107,7 +107,7 @@ const TableRow = <T extends { id: string }>({
             }
           }}
           style={style}
-          className={cn("w-full border-zinc-800  transition", {
+          className={cn("w-full border-r border-zinc-800 transition", {
             "border-b": !isLastRow,
             "bg-ds-table-row-bg-selected": focusIndex === index,
             "cursor-pointer hover:bg-ds-table-row-bg-hover":

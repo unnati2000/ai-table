@@ -42,7 +42,7 @@ const ResizeHandle: React.FC<ResizeHandleProps> = ({
 
   return (
     <div
-      className="group absolute  right-0 top-0 flex h-full w-10 cursor-col-resize items-center justify-center"
+      className="group absolute  right-0 top-0 flex h-full cursor-col-resize items-center justify-center"
       onMouseDown={handleMouseDown}
       style={{ zIndex: 10 }}
     >
@@ -52,3 +52,4 @@ const ResizeHandle: React.FC<ResizeHandleProps> = ({
 };
 
 export default ResizeHandle;
+

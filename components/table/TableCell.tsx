@@ -63,7 +63,7 @@ const TableCell = <T extends { id: string }>({
       }}
       ref={setNodeRef}
       style={style}
-      className={cn("h-[72px] overflow-hidden px-4 py-3", {
+      className={cn("h-[62px] border-r overflow-hidden px-4 py-3", {
         "px-10": index !== 0,
       })}
     >

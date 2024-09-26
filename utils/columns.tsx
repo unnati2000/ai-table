@@ -1,6 +1,6 @@
 "use client";
 
-import { Column, User } from "../types/table";
+import { Column, User, WebAnalytics, HR } from "../types/table";
 
 export const userTableColumns = (): Column<User>[] => {
   return [
@@ -67,6 +67,188 @@ export const userTableColumns = (): Column<User>[] => {
       isResizable: true,
       isRowHeader: true,
       width: 150,
+    },
+  ];
+};
+
+export const webAnalyticsColumns = (): Column<WebAnalytics>[] => {
+  return [
+    {
+      header: "Date",
+      key: "date",
+      cell: ({ row }) => <div>{row.date}</div>,
+      label: "Date",
+      minWidth: 100,
+      maxWidth: 150,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: true,
+      width: 125,
+    },
+    {
+      header: "Website",
+      key: "website",
+      cell: ({ row }) => <div>{row.website}</div>,
+      label: "Website",
+      minWidth: 100,
+      maxWidth: 150,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 150,
+    },
+    {
+      header: "Page Views",
+      key: "pageViews",
+      cell: ({ row }) => <div>{row.pageViews.toLocaleString()}</div>,
+      label: "Page Views",
+      minWidth: 100,
+      maxWidth: 150,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 125,
+    },
+    {
+      header: "Unique Visitors",
+      key: "uniqueVisitors",
+      cell: ({ row }) => <div>{row.visitors}</div>,
+      label: "Unique Visitors",
+      minWidth: 100,
+      maxWidth: 150,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 150,
+    },
+    {
+      header: "Bounce Rate (%)",
+      key: "bounceRate",
+      cell: ({ row }) => <div>{row.bounceRate.toFixed(2)}%</div>,
+      label: "Bounce Rate",
+      minWidth: 100,
+      maxWidth: 150,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 150,
+    },
+    {
+      header: "Avg. Session Duration (s)",
+      key: "avgSessionDuration",
+      cell: ({ row }) => <div>{row.averageSessionDuration}</div>,
+      label: "Avg. Session Duration",
+      minWidth: 100,
+      maxWidth: 200,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 200,
+    },
+    {
+      header: "Source",
+      key: "source",
+      cell: ({ row }) => <div>{row.source}</div>,
+      label: "Source",
+      minWidth: 100,
+      maxWidth: 200,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 150,
+    },
+  ];
+};
+
+export const hrTableColumns = (): Column<HR>[] => {
+  return [
+    {
+      header: "Name",
+      key: "name",
+      cell: ({ row }) => (
+        <div>
+          <p>{row.name}</p>
+        </div>
+      ),
+      label: "Name",
+      minWidth: 100,
+      maxWidth: 200,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: true,
+      width: 150,
+    },
+    {
+      header: "Email",
+      key: "email",
+      cell: ({ row }) => <div>{row.email}</div>,
+      label: "Email",
+      minWidth: 150,
+      maxWidth: 250,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: true,
+      width: 200,
+    },
+    {
+      header: "Phone Number",
+      key: "phoneNumber",
+      cell: ({ row }) => <div>{row.phone}</div>,
+      label: "Phone Number",
+      minWidth: 100,
+      maxWidth: 150,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 125,
+    },
+    {
+      header: "Department",
+      key: "department",
+      cell: ({ row }) => <div>{row.department}</div>,
+      label: "Department",
+      minWidth: 100,
+      maxWidth: 200,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 150,
+    },
+    {
+      header: "Position",
+      key: "position",
+      cell: ({ row }) => <div>{row.position}</div>,
+      label: "Position",
+      minWidth: 100,
+      maxWidth: 200,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 150,
+    },
+    {
+      header: "Salary",
+      key: "salary",
+      cell: ({ row }) => <div>${row.salary}</div>,
+      label: "Salary",
+      minWidth: 100,
+      maxWidth: 150,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 125,
+    },
+    {
+      header: "Hire Date",
+      key: "hireDate",
+      cell: ({ row }) => <div>{row.hireDate}</div>,
+      label: "Hire Date",
+      minWidth: 100,
+      maxWidth: 150,
+      isSortable: true,
+      isResizable: true,
+      isRowHeader: false,
+      width: 125,
     },
   ];
 };

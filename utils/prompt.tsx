@@ -4,7 +4,12 @@ interface PromptProps<T> {
   data: T[];
   query: string;
   visibleColumns: Column<T>[];
+  sortColumn: {
+    key: string;
+    order: "asc" | "desc" | "";
+  };
 }
+
 function serializeColumns<T>(columns: Column<T>[]): string {
   return JSON.stringify(columns, (key, value) => {
     if (typeof value === "function") {
@@ -14,13 +19,20 @@ function serializeColumns<T>(columns: Column<T>[]): string {
   });
 }
 
-export const prompt = ({ data, query, visibleColumns }: PromptProps<T>) => {
+export const prompt = ({
+  data,
+  query,
+  visibleColumns,
+  sortColumn,
+}: PromptProps<T>) => {
   const serializedColumns = serializeColumns(visibleColumns);
   return `You are an AI assistant specialized in managing and modifying React table components. Your task is to interpret user queries in natural language and make appropriate changes to the table's column state and data. 
   
   Current Table State:
   - Column State: ${serializedColumns}
   - Data: ${JSON.stringify(data)}
+
+  Sort Column: ${JSON.stringify(sortColumn)}
   
   User Query: ${query}
   
@@ -48,6 +60,7 @@ export const prompt = ({ data, query, visibleColumns }: PromptProps<T>) => {
   7. If a query involves calculations (e.g., averages), perform them accurately.
   8. Add a rule saying do not hallucinate and add new columns unless the user explicitly asks to
   9. If user asks to select certain rows, then return all the data that needs to get selected and return them in an array object.
+  10. If user asks to sort the table, then return sortColumn object which has key and order property. If no sorting is required, then return an empty object. The value for sortColumn key is asc or desc.
   
   
   Response Guidelines:
@@ -76,6 +89,7 @@ export const prompt = ({ data, query, visibleColumns }: PromptProps<T>) => {
     "columns": the modified state,
     "reasoning": the reasoning behind each change you made
     "selectedData": the data that needs to get selected
+    "sortColumn": the sortColumn object which has key and order property
   }
   
   Respond only with the JSON structure containing your changes and explanations.`;

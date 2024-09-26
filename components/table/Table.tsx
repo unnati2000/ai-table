@@ -35,9 +35,11 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
-import { Switch } from "@nextui-org/react";
+// import { Switch } from "@nextui-org/react";
 import TableColumn from "./TableColumn";
 import TableRow from "./TableRow";
+
+import { LuEyeOff, LuEye } from "react-icons/lu";
 
 interface TableProps<T> {
   columns: Column<T>[];
@@ -78,6 +80,7 @@ interface TableProps<T> {
     onAction: (id: string) => void;
   }[];
   setIsLoading: (isLoading: boolean) => void;
+  tableTitle?: string;
 }
 
 const Table = <
@@ -108,6 +111,7 @@ const Table = <
   rightClickMenuOptions,
   setSortColumn,
   sortColumn,
+  tableTitle,
 }: TableProps<T>) => {
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
 
@@ -215,46 +219,44 @@ const Table = <
 
   return (
     <div className={"relative h-full"}>
-      <div className={cn("relative rounded-xl")}>
-        <Dropdown closeOnSelect={false}>
-          <DropdownTrigger>
-            <Button
-              size="lg"
-              className={`absolute right-0 top-0 z-50 h-12 w-11 flex items-center justify-center rounded-none`}
-              isIconOnly
-              variant="solid"
-            >
-              <CiViewColumn className="text-ds-text-secondary" size={20} />
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            className="p-2 bg-zinc-900 rounded-md"
-            onAction={(key) => handleHide(key)}
-          >
-            {columns.map((column) => (
-              <DropdownItem
-                key={column.key}
-                className="p-2 hover:bg-zinc-950 rounded-md transition-colors duration-100 ease-in-out"
-                endContent={
-                  <Switch
-                    size="sm"
-                    isSelected={
-                      visibleColumns?.filter((item) => item.key === column.key)
-                        .length > 0
-                        ? true
-                        : false
-                    }
-                    onValueChange={() => {
-                      handleHide(column.key);
-                    }}
-                  />
-                }
+      <div className={cn("relative border-2 rounded-xl")}>
+        <div className="flex items-center border-b justify-between">
+          <div className="px-4">
+            <h1>{tableTitle}</h1>
+          </div>
+          <Dropdown closeOnSelect={false}>
+            <DropdownTrigger>
+              <Button
+                size="lg"
+                className={`z-50 h-12 w-11 flex border-none items-center justify-center bg-transparent rounded-tr-lg rounded-none`}
+                isIconOnly
               >
-                {column.label}
-              </DropdownItem>
-            ))}
-          </DropdownMenu>
-        </Dropdown>
+                <CiViewColumn className="text-ds-text-secondary" size={20} />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              className="p-2 bg-zinc-900 rounded-md"
+              onAction={(key) => handleHide(key)}
+            >
+              {columns.map((column) => (
+                <DropdownItem
+                  key={column.key}
+                  className="p-2 hover:bg-zinc-950 rounded-md transition-colors duration-100 ease-in-out"
+                  endContent={
+                    visibleColumns?.filter((item) => item.key === column.key)
+                      .length > 0 ? (
+                      <LuEye size={20} />
+                    ) : (
+                      <LuEyeOff size={20} />
+                    )
+                  }
+                >
+                  {column.label}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
 
         <DndContext
           collisionDetection={closestCenter}
@@ -265,33 +267,32 @@ const Table = <
           {/* Remove this random value of 200px from scrollbar */}
           <ScrollShadow
             visibility="none"
-            className={cn(
-              "w-full overflow-x-auto border border-zinc-700 rounded-xl"
-            )}
+            className={cn("w-full overflow-x-auto ")}
             style={{
-              maxHeight: scrollHeight
-                ? `${scrollHeight}px`
-                : "calc(100vh - 260px)",
+              // maxHeight: scrollHeight
+              //   ? `${scrollHeight}px`
+              //   : "calc(100vh - 250px)",
+              maxHeight: "500px",
             }}
           >
-            <div
-              ref={tableContainerRef}
-              className="relative border overflow-x-auto"
-            >
+            <div ref={tableContainerRef} className="relative overflow-x-auto">
               <table
-                className="w-full"
+                className="w-full relative"
                 suppressHydrationWarning
                 style={{
-                  // tableLayout: "fixed",
+                  tableLayout: "fixed",
                   marginBottom: tableActionsY ? `${tableActionsY}px` : "0px",
                 }}
               >
-                <thead className="sticky top-0 z-10">
+                <thead className="sticky z-100 top-0">
                   <SortableContext
                     items={visibleColumns?.map((item) => item.key)}
                     strategy={horizontalListSortingStrategy}
                   >
-                    <tr className="w-full py-2" ref={tableHeadRef}>
+                    <tr
+                      className="w-full py-2 sticky top-0 z-10"
+                      ref={tableHeadRef}
+                    >
                       {visibleColumns.map((column, index) => (
                         <TableColumn
                           column={column}

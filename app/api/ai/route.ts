@@ -12,21 +12,23 @@ interface RequestBody<T> {
   data: T[];
   query: string;
   visibleColumns: Column<T>[];
+  sortColumn: {
+    order: "" | "asc" | "desc";
+    key: string;
+  };
 }
 
 export async function POST<T>(request: NextRequest) {
   try {
     const body: RequestBody<T> = await request.json();
-    const { data, query, visibleColumns } = body;
-
-    console.log(prompt({ data, query, visibleColumns }));
+    const { data, query, visibleColumns, sortColumn } = body;
 
     const { object } = await generateObject({
       model: openai("gpt-4o-mini", {
         // structuredOutputs: true,
       }),
       output: "no-schema",
-      prompt: prompt({ data, query, visibleColumns }),
+      prompt: prompt({ data, query, visibleColumns, sortColumn }),
     });
 
     return NextResponse.json({ result: object }, { status: 200 });

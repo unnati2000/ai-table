@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button, Input, Chip, AvatarGroup, Avatar } from "@nextui-org/react";
 
@@ -20,14 +20,21 @@ import { IoAnalyticsSharp } from "react-icons/io5";
 
 import { Column } from "@/types/table";
 
-import { userTableColumns } from "@/utils/columns";
+import {
+  userTableColumns,
+  hrTableColumns,
+  webAnalyticsColumns,
+} from "@/utils/columns";
 
 import { GoPeople } from "react-icons/go";
 
 import { Skeleton } from "@nextui-org/react";
 // import StudentDataTable from "@/components/student-data/StudentDataTable";
 
-import { data } from "@/lib/data";
+import { users } from "@/lib/users";
+import { webAnalyticsData } from "@/lib/webanalytics";
+import { hrData } from "@/lib/hr";
+
 import Table from "@/components/table/Table";
 
 interface Sort {
@@ -69,7 +76,7 @@ export default function Home<T extends { id: string }>() {
   const [visibleColumns, setVisibleColumns] = useState<Column<T>[]>(
     userTableColumns()
   );
-  const [tableData, setTableData] = useState<T[]>(data);
+  const [tableData, setTableData] = useState<T[]>(users);
   const [selectedData, setSelectedData] = useState<T[] | []>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -95,6 +102,7 @@ export default function Home<T extends { id: string }>() {
           data: tableData,
           query: prompt,
           visibleColumns,
+          sortColumn: sort,
         }),
       });
 
@@ -114,12 +122,32 @@ export default function Home<T extends { id: string }>() {
         setSelectedData(responseData.result.selectedData);
       }
 
+      if (responseData.result.sortColumn) {
+        setSort(responseData.result.sortColumn);
+      }
+
       setPrompt("");
     } catch (error) {
     } finally {
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (selectedTable === "student-data") {
+      setTableData(users);
+      setVisibleColumns(userTableColumns());
+      setSelectedData([]);
+    } else if (selectedTable === "web-analytics") {
+      setTableData(webAnalyticsData);
+      setVisibleColumns(webAnalyticsColumns());
+      setSelectedData([]);
+    } else if (selectedTable === "hr-data") {
+      setTableData(hrData);
+      setVisibleColumns(hrTableColumns());
+      setSelectedData([]);
+    }
+  }, [selectedTable]);
 
   return (
     <div className="h-screen w-screen flex flex-col">
@@ -136,10 +164,10 @@ export default function Home<T extends { id: string }>() {
       <div className="flex flex-col gap-6">
         <HeroSection />
 
-        <div>
+        <div className="mx-20">
           <Table
             tableActions={null}
-            columns={visibleColumns}
+            columns={userTableColumns()}
             loadingState={
               <div className="flex justify-between px-3 py-4">
                 <div className="flex w-full items-center gap-1">
@@ -164,7 +192,7 @@ export default function Home<T extends { id: string }>() {
             }
             sortColumn={sort}
             setSortColumn={setSort}
-            scrollHeight={500}
+            scrollHeight={600}
             isColumnDragEnabled
             isRowDragEnabled
             isLoading={isLoading}
@@ -176,6 +204,7 @@ export default function Home<T extends { id: string }>() {
             tableData={tableData}
             setTableData={setTableData}
             isRowSelectionEnabled
+            tableTitle="Student's Info"
           />
         </div>
       </div>
@@ -190,6 +219,9 @@ export default function Home<T extends { id: string }>() {
                   table.slug as "student-data" | "web-analytics" | "hr-data"
                 );
               }}
+              className={`${
+                selectedTable === table.slug ? "bg-zinc-800" : "bg-zinc-900"
+              } cursor-pointer`}
             >
               <p>{table.title}</p>
             </Chip>
@@ -206,7 +238,7 @@ export default function Home<T extends { id: string }>() {
             endContent={
               <Button
                 onPress={() => {
-                  console.log(prompt);
+                  generateResponse();
                 }}
                 size="sm"
                 variant="solid"
