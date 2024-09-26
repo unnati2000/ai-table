@@ -13,3 +13,14 @@ export interface Column<T> {
   cell: ({ row }: { row: T }) => ReactNode;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  profileImage: string;
+  class: string;
+  mathsMarks: number;
+  scienceMarks: number;
+  englishMarks: number;
+}
+

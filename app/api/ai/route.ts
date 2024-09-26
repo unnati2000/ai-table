@@ -19,8 +19,10 @@ export async function POST<T>(request: NextRequest) {
     const body: RequestBody<T> = await request.json();
     const { data, query, visibleColumns } = body;
 
+    console.log(prompt({ data, query, visibleColumns }));
+
     const { object } = await generateObject({
-      model: openai("gpt-4-turbo", {
+      model: openai("gpt-4o-mini", {
         // structuredOutputs: true,
       }),
       output: "no-schema",
@@ -36,3 +38,4 @@ export async function POST<T>(request: NextRequest) {
     );
   }
 }
+

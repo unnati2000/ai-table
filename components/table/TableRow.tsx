@@ -143,7 +143,7 @@ const TableRow = <T extends { id: string }>({
               handleRowSelectionChange={handleRowSelectionChange}
               isRowSelected={
                 isAllRowsSelected ||
-                selectedData.filter((item: T) => item.id === row.id)?.length
+                selectedData?.filter((item: T) => item.id === row.id)?.length
                   ? true
                   : false
               }

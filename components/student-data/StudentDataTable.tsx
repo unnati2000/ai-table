@@ -22,7 +22,7 @@ interface User {
   englishMarks: number;
 }
 
-export default function StudentDataTable() {
+export default function StudentDataTable({ prompt }: { prompt: string }) {
   const tableColumns: Column<User>[] = useMemo(() => {
     return [
       {

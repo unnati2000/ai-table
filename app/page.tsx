@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Button, Input, Chip, AvatarGroup, Avatar } from "@nextui-org/react";
 
 import { useTheme } from "next-themes";
@@ -16,11 +18,24 @@ import { PiStudentLight } from "react-icons/pi";
 
 import { IoAnalyticsSharp } from "react-icons/io5";
 
+import { Column } from "@/types/table";
+
+import { userTableColumns } from "@/utils/columns";
+
 import { GoPeople } from "react-icons/go";
 
-import StudentDataTable from "@/components/student-data/StudentDataTable";
+import { Skeleton } from "@nextui-org/react";
+// import StudentDataTable from "@/components/student-data/StudentDataTable";
 
-const tableData = [
+import { data } from "@/lib/data";
+import Table from "@/components/table/Table";
+
+interface Sort {
+  key: string;
+  order: "asc" | "desc" | "";
+}
+
+const tableItems = [
   {
     title: "Student Data",
     Icon: PiStudentLight,
@@ -38,8 +53,73 @@ const tableData = [
   },
 ];
 
-export default function Home() {
+export default function Home<T extends { id: string }>() {
   const { theme } = useTheme();
+
+  const [prompt, setPrompt] = useState<string>("");
+  const [selectedTable, setSelectedTable] = useState<
+    "student-data" | "web-analytics" | "hr-data"
+  >("student-data");
+
+  const [sort, setSort] = useState<Sort>({
+    key: "",
+    order: "",
+  });
+
+  const [visibleColumns, setVisibleColumns] = useState<Column<T>[]>(
+    userTableColumns()
+  );
+  const [tableData, setTableData] = useState<T[]>(data);
+  const [selectedData, setSelectedData] = useState<T[] | []>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const deserializeColumns = (columns: string) => {
+    const parsedColumns: Column<T>[] = JSON.parse(columns);
+
+    return parsedColumns.map((column) => ({
+      ...column,
+      cell: eval(`(${column.cell.toString()})`),
+    }));
+  };
+
+  async function generateResponse() {
+    try {
+      setIsLoading(true);
+
+      const response = await fetch("/api/ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: tableData,
+          query: prompt,
+          visibleColumns,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("AI request failed");
+      }
+
+      const responseData = await response.json();
+
+      const deserializedColumns = deserializeColumns<T>(
+        JSON.stringify(responseData.result.columns)
+      );
+
+      setVisibleColumns(deserializedColumns);
+
+      if (responseData.result.selectedData) {
+        setSelectedData(responseData.result.selectedData);
+      }
+
+      setPrompt("");
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className="h-screen w-screen flex flex-col">
@@ -53,17 +133,62 @@ export default function Home() {
         </Button>
       </nav>
 
-      <HeroSection />
+      <div className="flex flex-col gap-6">
+        <HeroSection />
 
-      <StudentDataTable />
+        <div>
+          <Table
+            tableActions={null}
+            columns={visibleColumns}
+            loadingState={
+              <div className="flex justify-between px-3 py-4">
+                <div className="flex w-full items-center gap-1">
+                  <Skeleton className="h-10 w-10 rounded-full" />
+                  <div className="flex flex-col gap-1">
+                    <Skeleton className="h-4 w-44 rounded-md" />
+                    <Skeleton className="h-3 w-36 rounded-md" />
+                  </div>
+                </div>
+                <div className="flex w-full flex-col gap-1">
+                  <Skeleton className="h-4 w-44 rounded-md" />
+                  <Skeleton className="h-3 w-36 rounded-md" />
+                </div>
+                <div className="flex w-full items-center gap-2">
+                  <Skeleton className="h-4 w-12 rounded-full" />
+                </div>
+
+                <Skeleton className="h-4 w-44  rounded-md" />
+                <Skeleton className="h-4 w-44 rounded-md" />
+                <Skeleton className="h-4 w-44 rounded-md" />
+              </div>
+            }
+            sortColumn={sort}
+            setSortColumn={setSort}
+            scrollHeight={500}
+            isColumnDragEnabled
+            isRowDragEnabled
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            selectedData={selectedData}
+            setSelectedData={setSelectedData}
+            visibleColumns={visibleColumns}
+            setVisibleColumns={setVisibleColumns}
+            tableData={tableData}
+            setTableData={setTableData}
+            isRowSelectionEnabled
+          />
+        </div>
+      </div>
 
       <div className="fixed flex gap-4  items-center flex-col justify-center bottom-0 text-center h-[calc(100vh-900px)] w-full  backdrop-blur-md">
         <div className="flex items-center gap-2">
-          {tableData.map((table) => (
+          {tableItems.map((table) => (
             <Chip
               key={table.slug}
               onClick={() => {
-                // router.push(`/${table.slug}`);
+                setSelectedTable(
+                  table.slug as "student-data" | "web-analytics" | "hr-data"
+                );
               }}
             >
               <p>{table.title}</p>
@@ -73,14 +198,29 @@ export default function Home() {
 
         <div className="flex w-full items-center gap-2">
           <Input
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
             placeholder="Ask AI to hide 'Maths' column"
             size="lg"
             startContent={<BsStars />}
             endContent={
-              <Button size="sm" variant="solid" color="primary" isIconOnly>
+              <Button
+                onPress={() => {
+                  console.log(prompt);
+                }}
+                size="sm"
+                variant="solid"
+                color="primary"
+                isIconOnly
+              >
                 <LuSend />
               </Button>
             }
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                generateResponse();
+              }
+            }}
             className="placeholder:text-zinc-800"
             classNames={{
               base: "flex items-center justify-center",

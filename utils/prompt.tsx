@@ -39,7 +39,7 @@ export const prompt = ({ data, query, visibleColumns }: PromptProps<T>) => {
   }
   
   Instructions:
-  1. Add a cell function to every column which returns should return the content to be displayed. For example: ({ row }) => row.name
+  1. In addition to the modifications that have to be made, add a cell function to every column which returns should return the content to be displayed. For example: ({ row }) => row.name
   2. Analyze the user's query carefully.
   3. Make necessary modifications to the column state and/or data based on the query.
   4. Ensure all required columns are present in the final state.
@@ -52,7 +52,7 @@ export const prompt = ({ data, query, visibleColumns }: PromptProps<T>) => {
   
   Response Guidelines:
   - Always respond in JSON format.
-  - Do not add extra properties to columns. Stick to the in
+  - Do not add extra properties to columns. Stick to the interface provided.
   - Include 'success' (boolean), 'columns' (modified column state), 'data' (modified data array), 'message' (explanation of changes) fields and 'selectedData' (data that needs to get selected) if user asks to select certain rows.
   - If the query is unclear or cannot be executed, set 'success' to false and explain why in the 'message'.
   - Do not include any text outside the JSON structure.
