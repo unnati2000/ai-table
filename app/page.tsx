@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Chip, Input } from "@nextui-org/react";
+import { Button, Input, Chip, AvatarGroup, Avatar } from "@nextui-org/react";
 
 import { useTheme } from "next-themes";
 
@@ -10,25 +10,31 @@ import { BsStars } from "react-icons/bs";
 
 import { LuSend } from "react-icons/lu";
 
-import { CiMail } from "react-icons/ci";
+// import { CiMail } from "react-icons/ci";
+
+import { PiStudentLight } from "react-icons/pi";
+
+import { IoAnalyticsSharp } from "react-icons/io5";
+
+import { GoPeople } from "react-icons/go";
 
 import StudentDataTable from "@/components/student-data/StudentDataTable";
 
 const tableData = [
   {
     title: "Student Data",
-    Icon: null,
+    Icon: PiStudentLight,
     slug: "student-data",
   },
   {
-    title: "Sales Data",
-    Icon: null,
-    slug: "sales-data",
+    title: "Web analytics",
+    Icon: IoAnalyticsSharp,
+    slug: "web-analytics",
   },
   {
-    title: "Employee Data",
-    Icon: null,
-    slug: "employee-data",
+    title: "HR Data",
+    Icon: GoPeople,
+    slug: "hr-data",
   },
 ];
 
@@ -47,94 +53,93 @@ export default function Home() {
         </Button>
       </nav>
 
-      <div className="flex flex-col gap-12">
-        {/* main section */}
-        <div className="mt-4 flex flex-col items-center gap-6">
-          {/* fancy div */}
-          <div className="absolute -top-10 -left-10 h-[400px] w-[200px] rounded-full -rotate-45 bg-gradient-to-b from-zinc-900 to-zinc-800 blur-3xl" />
-          {/* main section */}
-          <div className="flex flex-col items-center gap-10">
-            <div className="flex flex-col items-center gap-2">
-              <p className="text-4xl font-bold">AI Tables</p>
-              <p className="text-lg text-zinc-600 max-w-xs text-center text-ds-text-secondary">
-                AI Tables is a tool that allows you to perform complex queries
-                on your data.
-              </p>
-            </div>
+      <HeroSection />
 
-            <div className="flex flex-col items-center gap-1">
-              <p className="text-lg font-semibold">
-                Want to join our waiting list?
-              </p>
-              <Input
-                placeholder="Add you email to join our waiting list..."
-                size="lg"
-                startContent={
-                  <div className="bg-zinc-800 rounded-lg p-2">
-                    <CiMail />
-                  </div>
-                }
-                className="shadow-md w-96"
-                classNames={{
-                  inputWrapper:
-                    "bg-zinc-950 border border-zinc-700 data-[focus=true]:bg-zinc-900 data-[focus=true]:border-zinc-600 data-[hover=true]:bg-zinc-900",
-                  input: "placeholder:text-zinc-700",
-                }}
-              />
-            </div>
-          </div>
+      <StudentDataTable />
 
-          {/* <div className="flex items-center gap-2">
+      <div className="fixed flex gap-4  items-center flex-col justify-center bottom-0 text-center h-[calc(100vh-900px)] w-full  backdrop-blur-md">
+        <div className="flex items-center gap-2">
           {tableData.map((table) => (
             <Chip
               key={table.slug}
               onClick={() => {
-                router.push(`/${table.slug}`);
+                // router.push(`/${table.slug}`);
               }}
             >
               <p>{table.title}</p>
             </Chip>
           ))}
-        </div> */}
         </div>
 
-        {/* try tables seciton */}
-        <div className="flex flex-col items-center gap-2">
-          <p>Try our demo with the following data</p>
-          <div className="flex items-center gap-2">
-            {tableData.map((table) => (
-              <Chip
-                className="bg-gradient-to-br text-zinc-400 from-zinc-800 to-zinc-900 p-4 cursor-pointer border border-zinc-700 hover:bg-gradient-to-br hover:from-zinc-900 hover:to-zinc-800 transition-all duration-300 ease-in-out"
-                key={table.slug}
-              >
-                {table.title}
-              </Chip>
-            ))}
-          </div>
+        <div className="flex w-full items-center gap-2">
+          <Input
+            placeholder="Ask AI to hide 'Maths' column"
+            size="lg"
+            startContent={<BsStars />}
+            endContent={
+              <Button size="sm" variant="solid" color="primary" isIconOnly>
+                <LuSend />
+              </Button>
+            }
+            className="placeholder:text-zinc-800"
+            classNames={{
+              base: "flex items-center justify-center",
+              mainWrapper: "w-1/2",
+              inputWrapper:
+                "border border-zinc-800 w-full h-full text-center rounded-xl bg-zinc-950 data-[hover=true]:bg-zinc-900 data-[active=true]:border-zinc-600",
+            }}
+          />
         </div>
-      </div>
-      <StudentDataTable />
-
-      <div className="fixed flex items-center justify-center bottom-0 text-center h-[calc(100vh-900px)] w-full  backdrop-blur-md">
-        <Input
-          placeholder="Ask AI to hide 'Maths' column"
-          size="lg"
-          startContent={<BsStars />}
-          endContent={
-            <Button size="sm" variant="solid" color="primary" isIconOnly>
-              <LuSend />
-            </Button>
-          }
-          className="placeholder:text-zinc-800"
-          classNames={{
-            base: "flex items-center justify-center",
-            mainWrapper: "w-1/2",
-            inputWrapper:
-              "border border-zinc-800 w-full h-full text-center rounded-lg bg-zinc-950 data-[hover=true]:bg-zinc-900 data-[active=true]:border-zinc-600",
-          }}
-        />
       </div>
     </div>
   );
 }
+
+const HeroSection = () => {
+  return (
+    <div className="flex flex-col gap-12">
+      {/* main section */}
+      <div className="mt-4 flex flex-col items-center gap-6">
+        {/* fancy div */}
+        <div className="absolute -top-10 -left-10 h-[400px] w-[200px] rounded-full -rotate-45 bg-gradient-to-b from-zinc-900 to-zinc-800 blur-3xl" />
+        {/* main section */}
+        <div className="flex flex-col items-center gap-10">
+          <div className="flex flex-col max-w-[480px] text-center items-center gap-2">
+            <p className="text-4xl font-bold">
+              Gather Insights, Intepret and Organise your tables at the speed of
+              thought
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <AvatarGroup>
+              <Avatar
+                name="Unnat"
+                src="https://avatars.githubusercontent.com/u/56268833?v=4"
+              />
+              <Avatar
+                name="Unnat"
+                src="https://avatars.githubusercontent.com/u/56268833?v=4"
+              />
+              <Avatar
+                name="Unnat"
+                src="https://avatars.githubusercontent.com/u/56268833?v=4"
+              />
+            </AvatarGroup>
+            <Input
+              placeholder="unnatibamania8@gmail.com"
+              size="lg"
+              className="shadow-md w-96"
+              classNames={{
+                inputWrapper:
+                  "bg-zinc-900 border rounded-full border-zinc-700 data-[focus=true]:bg-zinc-900 data-[focus=true]:border-zinc-600 data-[hover=true]:bg-zinc-900",
+                input: "placeholder:text-zinc-700",
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 

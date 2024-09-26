@@ -10,7 +10,6 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { Input } from "@nextui-org/react";
 
 // import { ollama } from "ollama-ai-provider";
 
@@ -62,7 +61,6 @@ interface TableProps<T> {
   selectedData: T[];
   paginationScrollRef?: React.LegacyRef<HTMLDivElement> | null;
   setSelectedData: (data: T[]) => void;
-  hasTableHeader: boolean;
   sortColumn?: {
     key: string;
     order: "asc" | "desc" | "";
@@ -70,8 +68,6 @@ interface TableProps<T> {
   emptyStateLabel?: string;
   emptyStateBody?: string;
   tableId: string;
-  headerContent?: React.ReactNode;
-  tableHeaderActions?: TableHeaderAction[];
   tableActions: React.ReactNode;
   setSortColumn?: (data: { key: string; order: "asc" | "desc" | "" }) => void;
   isLoading: boolean;
@@ -119,9 +115,6 @@ const Table = <
   setSelectedData,
   sortColumn,
   setSortColumn,
-  hasTableHeader = false,
-  // tableHeaderActions,
-  // headerContent,
   tableActions,
   isLoading,
   loadingState,
@@ -367,23 +360,13 @@ const Table = <
   }, [sort, data]);
 
   return (
-    <div className={"relative  h-full"}>
+    <div className={"relative h-full"}>
       <div className={cn("relative rounded-xl")}>
-        {hasTableHeader ? (
-          <div
-            className="flex items-center gap-2 justify-between p-4"
-            ref={headerRef}
-          ></div>
-        ) : null}
         <Dropdown closeOnSelect={false}>
           <DropdownTrigger>
             <Button
               size="lg"
-              className={`absolute right-0 top-0 z-50 h-12 w-11 flex items-center justify-center rounded-none ${
-                hasTableHeader
-                  ? `top-[${headerRef.current?.clientHeight}px]`
-                  : ""
-              }`}
+              className={`absolute right-0 top-0 z-50 h-12 w-11 flex items-center justify-center rounded-none`}
               isIconOnly
               variant="solid"
             >
@@ -437,12 +420,15 @@ const Table = <
                 : "calc(100vh - 260px)",
             }}
           >
-            <div ref={tableContainerRef} className="relative overflow-x-auto">
+            <div
+              ref={tableContainerRef}
+              className="relative border overflow-x-auto"
+            >
               <table
                 className="w-full"
                 suppressHydrationWarning
                 style={{
-                  tableLayout: "fixed",
+                  // tableLayout: "fixed",
                   marginBottom: tableActionsY ? `${tableActionsY}px` : "0px",
                 }}
               >
@@ -456,7 +442,6 @@ const Table = <
                         <TableColumn
                           column={column}
                           isSelectionEnabled={isSelectionEnabled}
-                          hasTableHeader={hasTableHeader}
                           setVisibleColumns={setVisibleColumns}
                           setSelectedData={setSelectedData}
                           visibleColumns={visibleColumns}

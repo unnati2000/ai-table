@@ -36,7 +36,11 @@ interface TableColumnProps<T> {
   setColumnWidths: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }
 
-const TableColumn = <T,>({
+const TableColumn = <
+  T extends {
+    id: string;
+  }
+>({
   column,
   index,
   // hasTableHeader,

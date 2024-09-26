@@ -127,8 +127,6 @@ export default function StudentDataTable() {
         // tableId="users"
         isColumnDragEnabled
         isRowDragEnabled
-        hasTableHeader={true}
-        headerContent={<div></div>}
         isLoading={isLoading}
         setIsLoading={setIsLoading}
         searchQuery=""
