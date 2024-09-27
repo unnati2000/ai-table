@@ -24,7 +24,7 @@ export async function POST<T>(request: NextRequest) {
     const { data, query, visibleColumns, sortColumn } = body;
 
     const { object } = await generateObject({
-      model: openai("gpt-4o-mini", {
+      model: openai("gpt-3.5-turbo", {
         // structuredOutputs: true,
       }),
       output: "no-schema",
@@ -40,4 +40,6 @@ export async function POST<T>(request: NextRequest) {
     );
   }
 }
+
+export const maxDuration = 30;
 

@@ -194,7 +194,7 @@ export default function Home<T extends { id: string }>() {
         </Button> */}
       </nav>
 
-      <div className="flex flex-col gap-20">
+      <div className="flex flex-col gap-12 md:gap-20">
         <HeroSection />
 
         <div className="mx-8 md:mx-20">
@@ -241,7 +241,7 @@ export default function Home<T extends { id: string }>() {
         </div>
       </div>
 
-      <div className="fixed flex gap-4  items-center flex-col justify-center pb-12 pt-4 bottom-0 text-center w-full  backdrop-blur-md">
+      <div className="fixed flex gap-4 items-center flex-col justify-center pb-12 pt-4 bottom-0 text-center w-full bg-gradient-to-b from-zinc-900/5 to-zinc-900/30 backdrop-blur-[2px]">
         <div className="flex items-center gap-2">
           {tableItems.map((table) => (
             <Chip
@@ -267,6 +267,7 @@ export default function Home<T extends { id: string }>() {
           <Textarea
             maxRows={4}
             value={prompt}
+            disabled={isLoading}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder={"Filter, sort, add columns, etc. with AI"}
             size="lg"
@@ -312,7 +313,9 @@ const HeroSection = () => {
   const [email, setEmail] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement | HTMLButtonElement>
+  ) => {
     event.preventDefault();
     setIsLoading(true);
     const formData = new FormData(event.target as HTMLFormElement);
@@ -349,7 +352,7 @@ const HeroSection = () => {
         {/* main section */}
         <div className="flex mt-12 flex-col items-center gap-6 z-10">
           <div className="flex flex-col max-w-xl text-center items-center gap-2 text-balance">
-            <h1 className={cn(font.className, "text-4xl font-bold")}>
+            <h1 className={cn(font.className, "text-3xl font-bold")}>
               Gather Insights, Interpret and Organise your tables at the speed
               of thought
             </h1>
@@ -357,9 +360,30 @@ const HeroSection = () => {
 
           <div className="flex items-center gap-2">
             <AvatarGroup className="pointer-events-none">
-              <Avatar name="Amey" size="sm" src="/amey.jpg" />
-              <Avatar name="Akash" size="sm" src="/ash.jpg" />
-              <Avatar name="Nitin" size="sm" src="/nitinr.jpg" />
+              <Avatar
+                name="Amey"
+                size="sm"
+                src="/amey.jpg"
+                classNames={{
+                  base: "border-2 border-zinc-900",
+                }}
+              />
+              <Avatar
+                name="Akash"
+                size="sm"
+                src="/ash.jpg"
+                classNames={{
+                  base: "border-2 border-zinc-900",
+                }}
+              />
+              <Avatar
+                name="Nitin"
+                size="sm"
+                src="/nitinr.jpg"
+                classNames={{
+                  base: "border-2 border-zinc-900",
+                }}
+              />
               <Avatar name="+21" size="sm" />
             </AvatarGroup>
             <form onSubmit={handleSubmit}>
@@ -371,11 +395,26 @@ const HeroSection = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 classNames={{
-                  mainWrapper: "w-full md:w-96",
+                  mainWrapper: "w-72 md:w-96",
                   inputWrapper:
                     "bg-zinc-950 border rounded-full border-zinc-700 data-[focus=true]:bg-zinc-900 data-[focus=true]:border-zinc-600 data-[hover=true]:bg-zinc-900",
                   input: "placeholder:text-zinc-500",
                 }}
+                endContent={
+                  <Button
+                    isLoading={isLoading}
+                    size="sm"
+                    variant="solid"
+                    color="primary"
+                    isIconOnly
+                    className="rounded-full"
+                    onClick={(e) => {
+                      handleSubmit(e);
+                    }}
+                  >
+                    <LuSend />
+                  </Button>
+                }
               />
             </form>
           </div>
