@@ -230,14 +230,15 @@ const Table = <
     <div className={"relative h-full"}>
       <div className={cn("relative border-2 rounded-xl")}>
         <div className="flex items-center border-b justify-between">
-          <div className="px-4">
+          <div className="px-4 py-2">
             <h1>{tableTitle}</h1>
             {previousPrompt && (
-              <p className="text-sm text-ds-text-secondary">
+              <p className="text-sm text-zinc-500">
                 Previous prompt: {previousPrompt}
               </p>
             )}
           </div>
+
           <Dropdown closeOnSelect={false}>
             <DropdownTrigger>
               <Button

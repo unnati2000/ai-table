@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import { Button, Input, Chip, AvatarGroup, Avatar } from "@nextui-org/react";
+
+import { toast } from "sonner";
 
 import { useTheme } from "next-themes";
 
@@ -13,6 +15,12 @@ import { BsStars } from "react-icons/bs";
 import { LuSend } from "react-icons/lu";
 
 import { cn } from "@/lib/utils";
+
+import {
+  studentPlaceholder,
+  hrPlaceholder,
+  salesPlaceholder,
+} from "@/utils/placeholder";
 
 // import { CiMail } from "react-icons/ci";
 
@@ -72,6 +80,7 @@ export default function Home<T extends { id: string }>() {
   const { theme } = useTheme();
 
   const [prompt, setPrompt] = useState<string>("");
+
   const [previousPrompt, setPreviousPrompt] = useState<string>("");
   const [selectedTable, setSelectedTable] = useState<
     "student-data" | "web-analytics" | "hr-data"
@@ -85,6 +94,17 @@ export default function Home<T extends { id: string }>() {
   const [visibleColumns, setVisibleColumns] = useState<Column<T>[]>(
     userTableColumns()
   );
+
+  const placeholders = useMemo(() => {
+    if (selectedTable === "student-data") {
+      return studentPlaceholder;
+    } else if (selectedTable === "web-analytics") {
+      return salesPlaceholder;
+    } else if (selectedTable === "hr-data") {
+      return hrPlaceholder;
+    }
+  }, [selectedTable]);
+
   const [tableData, setTableData] = useState<T[]>(users);
   const [selectedData, setSelectedData] = useState<T[] | []>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -128,6 +148,9 @@ export default function Home<T extends { id: string }>() {
       setVisibleColumns(deserializedColumns);
 
       if (responseData.result.selectedData) {
+        alert(
+          "selected data length: " + responseData.result.selectedData.length
+        );
         setSelectedData(responseData.result.selectedData);
       }
 
@@ -179,7 +202,13 @@ export default function Home<T extends { id: string }>() {
           <Table
             previousPrompt={previousPrompt}
             tableActions={null}
-            columns={userTableColumns()}
+            columns={
+              selectedTable === "student-data"
+                ? userTableColumns()
+                : selectedTable === "web-analytics"
+                ? webAnalyticsColumns()
+                : hrTableColumns()
+            }
             loadingState={
               selectedTable === "student-data"
                 ? StudentLoadingState
@@ -238,7 +267,7 @@ export default function Home<T extends { id: string }>() {
           <Input
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Ask AI to hide 'Maths' column"
+            placeholder={placeholders[0] || "Ask AI to hide 'Maths' column"}
             size="lg"
             startContent={<BsStars />}
             endContent={
@@ -266,7 +295,7 @@ export default function Home<T extends { id: string }>() {
               base: "flex items-center justify-center",
               mainWrapper: "w-1/2",
               inputWrapper:
-                "border border-zinc-800 w-full h-full text-center rounded-xl bg-zinc-950 data-[hover=true]:bg-zinc-900 data-[active=true]:border-zinc-600",
+                "border placeholder:transition-opacity placeholder:duration-300 border-zinc-800 w-full h-full text-center rounded-xl bg-zinc-950 data-[hover=true]:bg-zinc-900 data-[active=true]:border-zinc-600",
             }}
           />
         </div>
@@ -276,6 +305,37 @@ export default function Home<T extends { id: string }>() {
 }
 
 const HeroSection = () => {
+  const [email, setEmail] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+    const formData = new FormData(event.target as HTMLFormElement);
+    const data = Object.fromEntries(formData.entries());
+    console.log(data);
+
+    if (!email.trim()) {
+      toast.error("Please enter your feedback");
+      return;
+    }
+
+    const response = await fetch("/api/web3forms", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+
+    if (response.ok) {
+      setEmail("");
+      toast.success("Thank you for your interest in our product!");
+    } else {
+      toast.error(
+        "Seems like there's some issue from our side, please try again later"
+      );
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div className="flex flex-col gap-12">
       {/* main section */}
@@ -293,21 +353,26 @@ const HeroSection = () => {
 
           <div className="flex items-center gap-2">
             <AvatarGroup>
-              <Avatar name="Amey" src="/amey.jpg" />
-              <Avatar name="Akash" src="/ash.jpg" />
-              <Avatar name="Nitin" src="/nitinr.jpg" />
+              <Avatar name="Amey" size="sm" src="/amey.jpg" />
+              <Avatar name="Akash" size="sm" src="/ash.jpg" />
+              <Avatar name="Nitin" size="sm" src="/nitinr.jpg" />
             </AvatarGroup>
-            <Input
-              placeholder="unnatibamania8@gmail.com"
-              size="lg"
-              className="shadow-md w-96"
-              type="email"
-              classNames={{
-                inputWrapper:
-                  "bg-zinc-950 border rounded-full border-zinc-700 data-[focus=true]:bg-zinc-900 data-[focus=true]:border-zinc-600 data-[hover=true]:bg-zinc-900",
-                input: "placeholder:text-zinc-500",
-              }}
-            />
+            <form onSubmit={handleSubmit}>
+              <Input
+                placeholder="unnatibamania8@gmail.com"
+                size="lg"
+                disabled={isLoading}
+                className="shadow-md w-96"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                classNames={{
+                  inputWrapper:
+                    "bg-zinc-950 border rounded-full border-zinc-700 data-[focus=true]:bg-zinc-900 data-[focus=true]:border-zinc-600 data-[hover=true]:bg-zinc-900",
+                  input: "placeholder:text-zinc-500",
+                }}
+              />
+            </form>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 export const users = [
   {
+    id: "1",
     name: "John Doe",
     class: "12C",
     mathsMarks: 68,
@@ -7,6 +8,7 @@ export const users = [
     englishMarks: 71,
   },
   {
+    id: "2",
     name: "Jane Smith",
     class: "12C",
     mathsMarks: 82,
@@ -14,6 +16,7 @@ export const users = [
     englishMarks: 58,
   },
   {
+    id: "3",
     name: "Alice Johnson",
     class: "11A",
     mathsMarks: 71,
@@ -21,6 +24,7 @@ export const users = [
     englishMarks: 81,
   },
   {
+    id: "4",
     name: "Bob Brown",
     class: "12D",
     mathsMarks: 92,
@@ -28,6 +32,7 @@ export const users = [
     englishMarks: 83,
   },
   {
+    id: "5",
     name: "Charlie White",
     class: "11B",
     mathsMarks: 51,
@@ -35,6 +40,7 @@ export const users = [
     englishMarks: 83,
   },
   {
+    id: "6",
     name: "David Green",
     class: "10C",
     mathsMarks: 43,
@@ -42,6 +48,7 @@ export const users = [
     englishMarks: 61,
   },
   {
+    id: "7",
     name: "Eve Black",
     class: "10A",
     mathsMarks: 95,
@@ -49,6 +56,7 @@ export const users = [
     englishMarks: 71,
   },
   {
+    id: "8",
     name: "Frank Purple",
     class: "10B",
     mathsMarks: 68,
@@ -56,6 +64,7 @@ export const users = [
     englishMarks: 73,
   },
   {
+    id: "9",
     name: "Grace Blue",
     class: "10B",
     mathsMarks: 71,
@@ -63,6 +72,7 @@ export const users = [
     englishMarks: 65,
   },
   {
+    id: "10",
     name: "Henry Orange",
     class: "11B",
     mathsMarks: 90,
@@ -70,6 +80,7 @@ export const users = [
     englishMarks: 64,
   },
   {
+    id: "11",
     name: "Ivy Yellow",
     class: "12A",
     mathsMarks: 88,
@@ -77,6 +88,7 @@ export const users = [
     englishMarks: 59,
   },
   {
+    id: "12",
     name: "Jack Red",
     class: "12D",
     mathsMarks: 58,
@@ -84,6 +96,7 @@ export const users = [
     englishMarks: 84,
   },
   {
+    id: "13",
     name: "Kara Pink",
     class: "12A",
     mathsMarks: 95,
@@ -91,6 +104,7 @@ export const users = [
     englishMarks: 91,
   },
   {
+    id: "14",
     name: "Leo Gray",
     class: "12B",
     mathsMarks: 59,
@@ -98,6 +112,7 @@ export const users = [
     englishMarks: 95,
   },
   {
+    id: "15",
     name: "Mona Cyan",
     class: "12C",
     mathsMarks: 77,
@@ -105,6 +120,7 @@ export const users = [
     englishMarks: 83,
   },
   {
+    id: "16",
     name: "Nina Magenta",
     class: "10A",
     mathsMarks: 58,
@@ -112,6 +128,7 @@ export const users = [
     englishMarks: 42,
   },
   {
+    id: "17",
     name: "Omar Violet",
     class: "10A",
     mathsMarks: 44,
@@ -119,6 +136,7 @@ export const users = [
     englishMarks: 76,
   },
   {
+    id: "18",
     name: "Paul Indigo",
     class: "11A",
     mathsMarks: 87,
@@ -126,6 +144,7 @@ export const users = [
     englishMarks: 96,
   },
   {
+    id: "19",
     name: "Quinn Lime",
     class: "12B",
     mathsMarks: 43,
@@ -133,6 +152,7 @@ export const users = [
     englishMarks: 100,
   },
   {
+    id: "20",
     name: "Rita Gold",
     class: "12A",
     mathsMarks: 79,
