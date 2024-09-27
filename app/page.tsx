@@ -1,26 +1,22 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 
 import { Button, Input, Chip, AvatarGroup, Avatar } from "@nextui-org/react";
 
 import { toast } from "sonner";
 
-import { useTheme } from "next-themes";
+import localFont from "next/font/local";
 
-import { MdOutlineWbSunny, MdDarkMode } from "react-icons/md";
+// import { useTheme } from "next-themes";
+
+// import { MdOutlineWbSunny, MdDarkMode } from "react-icons/md";
 
 import { BsStars } from "react-icons/bs";
 
 import { LuSend } from "react-icons/lu";
 
 import { cn } from "@/lib/utils";
-
-import {
-  studentPlaceholder,
-  hrPlaceholder,
-  salesPlaceholder,
-} from "@/utils/placeholder";
 
 // import { CiMail } from "react-icons/ci";
 
@@ -77,7 +73,7 @@ const tableItems = [
 ];
 
 export default function Home<T extends { id: string }>() {
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
 
   const [prompt, setPrompt] = useState<string>("");
 
@@ -94,16 +90,6 @@ export default function Home<T extends { id: string }>() {
   const [visibleColumns, setVisibleColumns] = useState<Column<T>[]>(
     userTableColumns()
   );
-
-  const placeholders = useMemo(() => {
-    if (selectedTable === "student-data") {
-      return studentPlaceholder;
-    } else if (selectedTable === "web-analytics") {
-      return salesPlaceholder;
-    } else if (selectedTable === "hr-data") {
-      return hrPlaceholder;
-    }
-  }, [selectedTable]);
 
   const [tableData, setTableData] = useState<T[]>(users);
   const [selectedData, setSelectedData] = useState<T[] | []>([]);
@@ -148,9 +134,6 @@ export default function Home<T extends { id: string }>() {
       setVisibleColumns(deserializedColumns);
 
       if (responseData.result.selectedData) {
-        alert(
-          "selected data length: " + responseData.result.selectedData.length
-        );
         setSelectedData(responseData.result.selectedData);
       }
 
@@ -186,19 +169,19 @@ export default function Home<T extends { id: string }>() {
   return (
     <div className="h-screen w-screen flex flex-col">
       <nav className="flex justify-end p-3">
-        <Button isIconOnly>
+        {/* <Button isIconOnly>
           {theme === "light" ? (
             <MdOutlineWbSunny className="" size={20} />
           ) : (
             <MdDarkMode className="" size={20} />
           )}
-        </Button>
+        </Button> */}
       </nav>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-20">
         <HeroSection />
 
-        <div className="mx-20">
+        <div className="mx-8 md:mx-20">
           <Table
             previousPrompt={previousPrompt}
             tableActions={null}
@@ -218,7 +201,7 @@ export default function Home<T extends { id: string }>() {
             }
             sortColumn={sort}
             setSortColumn={setSort}
-            scrollHeight={600}
+            scrollHeight={800}
             isColumnDragEnabled
             isRowDragEnabled
             isLoading={isLoading}
@@ -267,7 +250,7 @@ export default function Home<T extends { id: string }>() {
           <Input
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder={placeholders[0] || "Ask AI to hide 'Maths' column"}
+            placeholder={"Filter, sort, add columns, etc. with AI"}
             size="lg"
             startContent={<BsStars />}
             endContent={
@@ -292,8 +275,8 @@ export default function Home<T extends { id: string }>() {
             }}
             className="placeholder:text-zinc-800"
             classNames={{
-              base: "flex items-center justify-center",
-              mainWrapper: "w-1/2",
+              base: "flex items-center justify-center px-4",
+              mainWrapper: "max-w-[600px] w-full",
               inputWrapper:
                 "border placeholder:transition-opacity placeholder:duration-300 border-zinc-800 w-full h-full text-center rounded-xl bg-zinc-950 data-[hover=true]:bg-zinc-900 data-[active=true]:border-zinc-600",
             }}
@@ -303,6 +286,10 @@ export default function Home<T extends { id: string }>() {
     </div>
   );
 }
+
+const font = localFont({
+  src: "../public/fonts/AzeretMono-Medium.woff2",
+});
 
 const HeroSection = () => {
   const [email, setEmail] = useState<string>("");
@@ -341,32 +328,33 @@ const HeroSection = () => {
       {/* main section */}
       <div className="mt-4 flex flex-col items-center gap-6">
         {/* fancy div */}
-        <div className="absolute -top-10 -left-10 h-[400px] w-[200px] rounded-full -rotate-45 bg-gradient-to-b from-zinc-900 to-zinc-800 blur-3xl" />
+        <div className="absolute -top-10 -left-10 h-[400px] w-[200px] rounded-full -rotate-45 bg-gradient-to-b from-zinc-900 to-zinc-800 blur-2xl" />
         {/* main section */}
-        <div className="flex flex-col items-center gap-10">
-          <div className="flex flex-col max-w-[480px] text-center items-center gap-2">
-            <p className="text-4xl font-bold">
-              Gather Insights, Intepret and Organise your tables at the speed of
-              thought
-            </p>
+        <div className="flex mt-12 flex-col items-center gap-6 z-10">
+          <div className="flex flex-col max-w-xl text-center items-center gap-2 text-balance">
+            <h1 className={cn(font.className, "text-4xl font-bold")}>
+              Gather Insights, Interpret and Organise your tables at the speed
+              of thought
+            </h1>
           </div>
 
           <div className="flex items-center gap-2">
-            <AvatarGroup>
+            <AvatarGroup className="pointer-events-none">
               <Avatar name="Amey" size="sm" src="/amey.jpg" />
               <Avatar name="Akash" size="sm" src="/ash.jpg" />
               <Avatar name="Nitin" size="sm" src="/nitinr.jpg" />
+              <Avatar name="+21" size="sm" />
             </AvatarGroup>
             <form onSubmit={handleSubmit}>
               <Input
                 placeholder="unnatibamania8@gmail.com"
                 size="lg"
                 disabled={isLoading}
-                className="shadow-md w-96"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 classNames={{
+                  mainWrapper: "w-full md:w-96",
                   inputWrapper:
                     "bg-zinc-950 border rounded-full border-zinc-700 data-[focus=true]:bg-zinc-900 data-[focus=true]:border-zinc-600 data-[hover=true]:bg-zinc-900",
                   input: "placeholder:text-zinc-500",

@@ -27,17 +27,17 @@ export interface User {
 export interface WebAnalytics {
   date: string;
   website: string;
-  visitors: number;
+  uniqueVisitors: number;
   pageViews: number;
   bounceRate: number;
-  averageSessionDuration: number;
+  avgSessionDuration: number;
   source: string;
 }
 
 export interface HR {
   name: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   department: string;
   position: string;
   salary: number;

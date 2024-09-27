@@ -112,7 +112,7 @@ const Table = <
   hasRowActions = false,
   rowActions,
   isRowSelectionEnabled = true,
-  scrollHeight,
+  // scrollHeight,
   topContent,
   tableActionsY = 16,
   onRowClick,
@@ -136,6 +136,7 @@ const Table = <
   // resizing column states
 
   const handleColumnDragEnd = (event: DragEndEvent) => {
+    console.log(event);
     const { active, over } = event;
 
     if (!over) return;
@@ -284,10 +285,7 @@ const Table = <
             visibility="none"
             className={cn("w-full overflow-x-auto ")}
             style={{
-              // maxHeight: scrollHeight
-              //   ? `${scrollHeight}px`
-              //   : "calc(100vh - 250px)",
-              maxHeight: "500px",
+              maxHeight: "600px",
             }}
           >
             <div ref={tableContainerRef} className="relative overflow-x-auto">
@@ -356,7 +354,7 @@ const Table = <
                         ? [...Array(5)].map((_, index) => (
                             <tr key={index}>
                               <td colSpan={visibleColumns.length}>
-                                {loadingState}
+                                {loadingState()}
                               </td>
                             </tr>
                           ))

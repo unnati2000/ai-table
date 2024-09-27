@@ -112,7 +112,7 @@ export const webAnalyticsColumns = (): Column<WebAnalytics>[] => {
     {
       header: "Unique Visitors",
       key: "uniqueVisitors",
-      cell: ({ row }) => <div>{row.visitors}</div>,
+      cell: ({ row }) => <div>{row.uniqueVisitors}</div>,
       label: "Unique Visitors",
       minWidth: 100,
       maxWidth: 150,
@@ -136,7 +136,7 @@ export const webAnalyticsColumns = (): Column<WebAnalytics>[] => {
     {
       header: "Avg. Session Duration (s)",
       key: "avgSessionDuration",
-      cell: ({ row }) => <div>{row.averageSessionDuration}</div>,
+      cell: ({ row }) => <div>{row.avgSessionDuration}</div>,
       label: "Avg. Session Duration",
       minWidth: 100,
       maxWidth: 200,
@@ -193,7 +193,7 @@ export const hrTableColumns = (): Column<HR>[] => {
     {
       header: "Phone Number",
       key: "phoneNumber",
-      cell: ({ row }) => <div>{row.phone}</div>,
+      cell: ({ row }) => <div>{row.phoneNumber}</div>,
       label: "Phone Number",
       minWidth: 100,
       maxWidth: 150,
