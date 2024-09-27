@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+import { Analytics } from "@vercel/analytics/react";
+
 import { NextUIProvider } from "@nextui-org/react";
 
 import { ThemeProvider } from "next-themes";
@@ -34,6 +36,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
       >
+        <Analytics />
         <ThemeProvider defaultTheme="dark" attribute="class">
           <NextUIProvider>
             <Toaster />
