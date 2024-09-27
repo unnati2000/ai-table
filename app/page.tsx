@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-import { Button, Input, Chip, AvatarGroup, Avatar } from "@nextui-org/react";
+import {
+  Button,
+  Textarea,
+  Input,
+  Chip,
+  AvatarGroup,
+  Avatar,
+} from "@nextui-org/react";
 
 import { toast } from "sonner";
 
@@ -246,8 +253,9 @@ export default function Home<T extends { id: string }>() {
           ))}
         </div>
 
-        <div className="flex w-full items-center gap-2">
-          <Input
+        <div className="flex w-full justify-center items-center gap-2">
+          <Textarea
+            maxRows={4}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder={"Filter, sort, add columns, etc. with AI"}
@@ -275,8 +283,7 @@ export default function Home<T extends { id: string }>() {
             }}
             className="placeholder:text-zinc-800"
             classNames={{
-              base: "flex items-center justify-center px-4",
-              mainWrapper: "max-w-[600px] w-full",
+              base: "flex items-center max-w-[600px] justify-center px-4",
               inputWrapper:
                 "border placeholder:transition-opacity placeholder:duration-300 border-zinc-800 w-full h-full text-center rounded-xl bg-zinc-950 data-[hover=true]:bg-zinc-900 data-[active=true]:border-zinc-600",
             }}
