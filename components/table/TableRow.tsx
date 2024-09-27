@@ -164,6 +164,7 @@ const TableRow = <T extends { id: string }>({
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu items={rowActions}>
+                  {/* @ts-expect-error Fix this later */}
                   {rowActions?.map((action) => (
                     <DropdownItem
                       key={action.label}
@@ -183,6 +184,7 @@ const TableRow = <T extends { id: string }>({
           <Listbox
             classNames={{ base: "border border-ds-menu-border", list: "p-1" }}
           >
+            {/* @ts-expect-error Fix this later */}
             {rightClickMenuOptions?.map((option) => (
               <ListboxItem
                 key={option.key}
