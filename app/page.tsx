@@ -151,6 +151,10 @@ export default function Home<T extends { id: string }>() {
         setSort(responseData.result.sortColumn);
       }
 
+      console.log(responseData.result.data);
+
+      setTableData(responseData.result.data);
+
       setPreviousPrompt(prompt);
 
       setPrompt("");
@@ -161,6 +165,7 @@ export default function Home<T extends { id: string }>() {
   }
 
   useEffect(() => {
+    setPrompt("");
     if (selectedTable === "student-data") {
       // @ts-expect-error Fix this later
       setTableData(users);
