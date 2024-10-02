@@ -258,7 +258,7 @@ const Table = <
               className="p-2 bg-zinc-900 rounded-md"
               onAction={(key) => handleHide(key)}
             >
-              {columns.map((column) => (
+              {columns?.map((column) => (
                 <DropdownItem
                   key={column.key}
                   className="p-2 hover:bg-zinc-950 rounded-md transition-colors duration-100 ease-in-out"
@@ -310,7 +310,7 @@ const Table = <
                       className="w-full py-2 sticky top-0 z-10"
                       ref={tableHeadRef}
                     >
-                      {visibleColumns.map((column, index) => (
+                      {visibleColumns?.map((column, index) => (
                         <TableColumn
                           // @ts-expect-error Fix this later
                           column={column}
@@ -353,7 +353,7 @@ const Table = <
                   sensors={sensors}
                 >
                   <SortableContext
-                    items={tableData.map((item) => item.id)}
+                    items={tableData?.map((item) => item.id)}
                     strategy={verticalListSortingStrategy}
                   >
                     <tbody>
@@ -366,7 +366,7 @@ const Table = <
                             </tr>
                           ))
                         : tableData.length > 0
-                        ? tableData.map((item, index) => (
+                        ? tableData?.map((item, index) => (
                             <TableRow
                               key={item.id}
                               hasRightClickMenu={hasRightClickMenu}

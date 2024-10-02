@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import {
   Button,
   Textarea,
@@ -14,6 +16,8 @@ import {
 import { toast } from "sonner";
 
 import localFont from "next/font/local";
+
+import { HiOutlinePencilAlt } from "react-icons/hi";
 
 // import { useTheme } from "next-themes";
 
@@ -81,6 +85,8 @@ const tableItems = [
 
 export default function Home<T extends { id: string }>() {
   // const { theme } = useTheme();
+
+  const router = useRouter();
 
   const [prompt, setPrompt] = useState<string>("");
 
@@ -190,13 +196,14 @@ export default function Home<T extends { id: string }>() {
   return (
     <div className="h-screen w-screen flex flex-col">
       <nav className="flex justify-end p-3">
-        {/* <Button isIconOnly>
-          {theme === "light" ? (
-            <MdOutlineWbSunny className="" size={20} />
-          ) : (
-            <MdDarkMode className="" size={20} />
-          )}
-        </Button> */}
+        <Button
+          variant="solid"
+          startContent={<HiOutlinePencilAlt />}
+          color="primary"
+          onPress={() => router.push("/playground")}
+        >
+          Playground
+        </Button>
       </nav>
 
       <div className="flex flex-col gap-12 md:gap-20">
