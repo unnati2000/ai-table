@@ -9,6 +9,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider } from "next-themes";
 
 import { Toaster } from "sonner";
+import Navbar from "@/components/navbar/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -40,6 +41,7 @@ export default function RootLayout({
         <ThemeProvider defaultTheme="dark" attribute="class">
           <NextUIProvider>
             <Toaster />
+            <Navbar />
             {children}
           </NextUIProvider>
         </ThemeProvider>
