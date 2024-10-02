@@ -7,6 +7,10 @@ import {
 } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/react";
 
+import { serializeColumns } from "@/utils/tableUtils";
+
+import { FaArrowRight } from "react-icons/fa";
+
 import { useState, useEffect } from "react";
 
 import { Button } from "@nextui-org/react";
@@ -50,21 +54,46 @@ export const ColumnModal = <T extends { id: string }>({
     // }
   }, [columnNames]);
 
+  const onSubmit = () => {
+    const serializedColumns = serializeColumns(columns as Column<T>[]);
+
+    localStorage.setItem("columns", serializedColumns);
+
+    localStorage.setItem("rows", JSON.stringify(rows));
+
+    localStorage.setItem("tableName", JSON.stringify(tableName));
+
+    localStorage.setItem(
+      "isColumnDragEnabled",
+      JSON.stringify(isColumnDragEnabled)
+    );
+
+    localStorage.setItem("isRowDragEnabled", JSON.stringify(isRowDragEnabled));
+
+    onClose();
+  };
+
   return (
     <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
-      <ModalContent>
+      <ModalContent className="p-4">
         <ModalHeader>
-          <h1>Table settings</h1>
+          <div className="flex flex-col gap-1">
+            <h1 className="text-2xl font-semibold">Table settings</h1>
+            <p className="text-sm font-normal text-zinc-500">
+              Customize your table with the options below.
+            </p>
+          </div>
         </ModalHeader>
         <ModalBody>
           <div className="flex flex-col gap-4">
             {/* table name */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1">
                 <p className="text-xs text-zinc-500">Table Name</p>
                 <Input
                   placeholder="Table name"
                   value={tableName}
+                  className="w-3/4"
                   onChange={(e) => setTableName(e.target.value)}
                 />
               </div>
@@ -73,15 +102,32 @@ export const ColumnModal = <T extends { id: string }>({
                 <Checkbox
                   isSelected={isColumnDragEnabled}
                   onValueChange={setIsColumnDragEnabled}
+                  className="flex items-start"
                 >
-                  Is column drag enabled
+                  <div className="flex flex-col">
+                    <p className="text-sm font-normal text-zinc-300">
+                      Is column drag enabled?
+                    </p>
+                    <p className="text-xs font-normal text-zinc-500">
+                      Enable column drag to move columns to your desired
+                      position.
+                    </p>
+                  </div>
                 </Checkbox>
 
                 <Checkbox
                   isSelected={isRowDragEnabled}
                   onValueChange={setIsRowDragEnabled}
+                  className="flex items-start"
                 >
-                  Is Row drag enabled
+                  <div className="flex flex-col">
+                    <p className="text-sm font-normal text-zinc-300">
+                      Is Row drag enabled?
+                    </p>
+                    <p className="text-xs font-normal text-zinc-500">
+                      Enable row drag to move rows to your desired position.
+                    </p>
+                  </div>
                 </Checkbox>
               </div>
             </div>
@@ -120,7 +166,12 @@ export const ColumnModal = <T extends { id: string }>({
           <Button variant="flat" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="solid" color="primary" onClick={() => {}}>
+          <Button
+            variant="solid"
+            endContent={<FaArrowRight />}
+            color="primary"
+            onClick={onSubmit}
+          >
             Let&apos;s go
           </Button>
         </ModalFooter>

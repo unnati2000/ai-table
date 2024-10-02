@@ -10,15 +10,7 @@ interface PromptProps<T> {
   };
 }
 
-function serializeColumns<T>(columns: Column<T>[]): string {
-  return JSON.stringify(columns, (key, value) => {
-    if (typeof value === "function") {
-      return value.toString();
-    }
-    return value;
-  });
-}
-
+import { serializeColumns } from "./tableUtils";
 export const prompt = ({
   data,
   query,

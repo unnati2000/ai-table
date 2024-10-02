@@ -7,7 +7,19 @@ import { ColumnModal } from "@/components/modal/ColumnModal";
 
 import { Spinner } from "@nextui-org/react";
 
-const Playground = () => {
+import Table from "@/components/table/Table";
+
+import { Column } from "@/types/table";
+
+import { useMemo } from "react";
+
+import { deserializeColumns } from "@/utils/tableUtils";
+
+const Playground = <
+  T extends {
+    id: string;
+  }
+>() => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [columnNames, setColumnNames] = useState<string[]>([]);
@@ -47,34 +59,96 @@ const Playground = () => {
     }
   };
 
+  // const columns = useMemo(
+  //   () => deserializeColumns(localStorage.getItem("columns") || "[]"),
+  //   []
+  // );
+  // const visibleColumns = useMemo(
+  //   () => deserializeColumns(localStorage.getItem("columns") || "[]"),
+  //   []
+  // );
+
+  // const tableRows = JSON.parse(localStorage.getItem("rows") || "[]");
+
+  const isRowDragEnabled = JSON.parse(
+    localStorage.getItem("isRowDragEnabled") || "false"
+  );
+  const isColumnDragEnabled = JSON.parse(
+    localStorage.getItem("isColumnDragEnabled") || "false"
+  );
+  const tableName = localStorage.getItem("tableName") || "";
+
+  const columns = useMemo<Column<T>[]>(
+    () => deserializeColumns<T>(localStorage.getItem("columns") || "[]"),
+    []
+  );
+
+  const visibleColumns = useMemo<Column<T>[]>(
+    () => deserializeColumns<T>(localStorage.getItem("columns") || "[]"),
+    []
+  );
+
+  console.log({
+    columns,
+    rows,
+  });
+
   return (
     <div className="flex flex-col items-center h-screen w-screen justify-center gap-4">
-      <div
-        onClick={() => inputRef.current?.click()}
-        className="border cursor-pointer border-dashed min-h-80 min-w-[480px] flex flex-col items-center justify-center rounded-xl border-zinc-700"
-      >
-        {isLoading ? (
-          <Spinner color="white" />
-        ) : (
-          <>
-            <BsFiletypeCsv className="text-4xl text-zinc-400" />
-            <h1 className="text-xl font-bold">Upload your file</h1>
+      {rows.length > 0 && visibleColumns.length > 0 && columns.length > 0 ? (
+        <Table
+          columns={columns as Column<T>[]}
+          isColumnDragEnabled={isColumnDragEnabled}
+          isRowDragEnabled={isRowDragEnabled}
+          tableTitle={tableName}
+          isLoading={false}
+          loadingState={() => <div></div>}
+          tableData={rows}
+          setTableData={() => {}}
+          selectedData={[]}
+          setSelectedData={() => {}}
+          visibleColumns={visibleColumns as Column<T>[]}
+          setVisibleColumns={() => {}}
+          setIsLoading={() => {}}
+          tableActions={null}
+          hasRightClickMenu
+          isRowSelectionEnabled={true}
+          sortColumn={{
+            key: "",
+            order: "",
+          }}
+          setSortColumn={() => {}}
+          rowActions={[]}
+          scrollHeight={400}
+        />
+      ) : (
+        <div
+          onClick={() => inputRef.current?.click()}
+          className="border cursor-pointer border-dashed min-h-80 min-w-[480px] flex flex-col items-center justify-center rounded-xl border-zinc-700"
+        >
+          {isLoading ? (
+            <Spinner color="white" />
+          ) : (
+            <>
+              <BsFiletypeCsv className="text-4xl text-zinc-400" />
+              <h1 className="text-xl font-bold">Upload your file</h1>
 
-            <p className="text-sm text-zinc-400">
-              Get started by uploading your file. File should be in{" "}
-              <span>.csv</span> format
-            </p>
+              <p className="text-sm text-zinc-400">
+                Get started by uploading your file. File should be in{" "}
+                <span>.csv</span> format
+              </p>
 
-            <input
-              ref={inputRef}
-              hidden
-              type="file"
-              accept=".csv"
-              onChange={handleFileUpload}
-            />
-          </>
-        )}
-      </div>
+              <input
+                ref={inputRef}
+                hidden
+                type="file"
+                accept=".csv"
+                onChange={handleFileUpload}
+              />
+            </>
+          )}
+        </div>
+      )}
 
       <ColumnModal
         isOpen={isOpen}
