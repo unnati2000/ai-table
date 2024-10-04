@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 import {
   Button,
@@ -17,7 +17,7 @@ import { toast } from "sonner";
 
 import localFont from "next/font/local";
 
-import { HiOutlinePencilAlt } from "react-icons/hi";
+// import { HiOutlinePencilAlt } from "react-icons/hi";
 
 // import { useTheme } from "next-themes";
 
@@ -86,7 +86,7 @@ const tableItems = [
 export default function Home<T extends { id: string }>() {
   // const { theme } = useTheme();
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const [prompt, setPrompt] = useState<string>("");
 
@@ -195,17 +195,6 @@ export default function Home<T extends { id: string }>() {
 
   return (
     <div className="h-screen w-screen flex flex-col">
-      <nav className="flex justify-end p-3">
-        <Button
-          variant="solid"
-          startContent={<HiOutlinePencilAlt />}
-          color="primary"
-          onPress={() => router.push("/playground")}
-        >
-          Playground
-        </Button>
-      </nav>
-
       <div className="flex flex-col gap-12 md:gap-20">
         <HeroSection />
 
@@ -360,7 +349,7 @@ const HeroSection = () => {
       {/* main section */}
       <div className="mt-4 flex flex-col items-center gap-6">
         {/* fancy div */}
-        <div className="absolute -top-10 -left-10 h-[400px] w-[200px] rounded-full -rotate-45 bg-gradient-to-b from-zinc-900 to-zinc-800 blur-2xl" />
+        <div className="absolute -top-6 -left-10 h-[400px] w-[200px] rounded-full -rotate-45 bg-gradient-to-b from-zinc-900 to-zinc-800 blur-2xl" />
         {/* main section */}
         <div className="flex mt-12 flex-col items-center gap-6 z-10">
           <div className="flex flex-col max-w-xl text-center items-center gap-2 text-balance">

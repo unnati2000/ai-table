@@ -102,7 +102,7 @@ const Playground = <
 
       const responseData = await response.json();
 
-      // @ts-expect-error Fix this later
+      // @ts-expect-error: Fix this later
       const deserializedColumns = deserializeColumns<T>(
         JSON.stringify(responseData.result.columns)
       );
@@ -152,7 +152,7 @@ const Playground = <
             isRowDragEnabled={JSON.parse(
               localStorage.getItem("isRowDragEnabled") || "false"
             )}
-            tableTitle={localStorage.getItem("tableName") || ""}
+            tableTitle={JSON.parse(localStorage.getItem("tableName") || "{}")}
             isLoading={false}
             loadingState={() => <div></div>}
             tableData={rows}
