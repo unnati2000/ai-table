@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 
 import { HiOutlinePencilAlt } from "react-icons/hi";
 
-import { LiaStickyNoteSolid } from "react-icons/lia";
-
 import {
   Popover,
   PopoverContent,
