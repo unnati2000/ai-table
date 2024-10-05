@@ -102,7 +102,6 @@ const Playground = <
 
       const responseData = await response.json();
 
-      // @ts-expect-error: Fix this later
       const deserializedColumns = deserializeColumns<T>(
         JSON.stringify(responseData.result.columns)
       );
@@ -220,45 +219,52 @@ const Playground = <
               <Spinner color="white" />
             ) : (
               <>
-                <BsFiletypeCsv className="text-4xl text-zinc-400" />
-                <h1 className="text-xl font-bold">Upload your file</h1>
+                <div className="flex flex-col items-center gap-3">
+                  <BsFiletypeCsv className="text-5xl text-zinc-400" />
 
-                <p className="text-sm text-zinc-400">
-                  Get started by uploading your file. File should be in{" "}
-                  <span>.csv</span> format
-                </p>
+                  <div className="flex flex-col items-center gap-1">
+                    <h1 className="text-xl font-bold">Upload your file</h1>
 
-                <Button
-                  color="primary"
-                  variant="solid"
-                  className="mt-4"
-                  onPress={() => {
-                    const sampleCsv = `id,name,age
+                    <p className="text-sm text-zinc-400">
+                      Get started by uploading your file. File should be in{" "}
+                      <span>.csv</span> format
+                    </p>
+
+                    <Button
+                      color="primary"
+                      variant="solid"
+                      className="mt-4"
+                      onPress={() => {
+                        const sampleCsv = `id,name,age
                     1,John Doe,25
                     2,Jane Doe,30
                     3,Jim Beam,35`;
-                    const blob = new Blob([sampleCsv], { type: "text/csv" });
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.style.display = "none";
-                    a.href = url;
-                    a.download = "sample.csv";
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                  }}
-                >
-                  Download sample CSV
-                </Button>
+                        const blob = new Blob([sampleCsv], {
+                          type: "text/csv",
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.style.display = "none";
+                        a.href = url;
+                        a.download = "sample.csv";
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                      }}
+                    >
+                      Download sample CSV
+                    </Button>
 
-                <input
-                  ref={inputRef}
-                  hidden
-                  type="file"
-                  accept=".csv"
-                  onChange={handleFileUpload}
-                />
+                    <input
+                      ref={inputRef}
+                      hidden
+                      type="file"
+                      accept=".csv"
+                      onChange={handleFileUpload}
+                    />
+                  </div>
+                </div>
               </>
             )}
           </div>

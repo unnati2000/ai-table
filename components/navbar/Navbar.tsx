@@ -21,7 +21,7 @@ const Navbar = () => {
   const router = useRouter();
 
   return (
-    <div className="border-b py-3 px-4 flex justify-between items-center border-zinc-800 shadow-lg">
+    <div className="border-b p-4 flex justify-between items-center border-zinc-800 shadow-lg">
       <h3 className="text-xl font-bold">
         <span className="bg-gradient-to-r from-zinc-500 to-zinc-700 bg-clip-text text-transparent">
           Hyper
@@ -29,24 +29,18 @@ const Navbar = () => {
         Tables
       </h3>
 
-      <div className="flex items-center gap-2">
-        <Button
-          variant="bordered"
-          size="sm"
-          startContent={<LiaStickyNoteSolid size={18} />}
-        >
-          Feedback
-        </Button>
-
-        <Button
-          variant="solid"
-          startContent={<HiOutlinePencilAlt size={18} />}
-          color="primary"
-          size="sm"
-          onPress={() => router.push("/playground")}
-        >
-          Playground
-        </Button>
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="solid"
+            startContent={<HiOutlinePencilAlt size={18} />}
+            color="primary"
+            size="sm"
+            onPress={() => router.push("/playground")}
+          >
+            Playground
+          </Button>
+        </div>
 
         <Popover>
           <PopoverTrigger>
